@@ -7,18 +7,27 @@
     <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
 </head>
 <body>
-    <a-scene background="color: #222">
+     <!-- Moduskeuze: standaard normaal scherm -->
+    <div id="mode-selector" style="position: fixed; top: 10px; left: 10px; z-index: 9999;">
+        <button id="normalModeBtn">Normaal scherm</button>
+        <button id="vrModeBtn">VR bril</button>
+    </div>
+    <a-scene background="color: #222"
+         device-orientation-permission-ui="enabled: true">
+
+
         <!-- Asset Management: Hier zet je later jouw eigen foto's en video's in -->
         <a-assets>
   <img id="intro-bg" src="startpagina.png" crossorigin="anonymous">
 
   <img id="vraag-foto" src="https://via.placeholder.com/1024x512/005500/FFFFFF?text=Stelling+Foto" crossorigin="anonymous">
 
-  <!-- Eerste video -->
-  <video id="actie-video" src="intro.mp4" playsinline webkit-playsinline crossorigin="anonymous"></video>
+ <!-- Eerste video -->
+<video id="actie-video" src="intro.mp4" playsinline webkit-playsinline crossorigin="anonymous"></video>
 
-  <!-- Tweede video -->
-  <video id="tweede-video" src="tweede.mp4" playsinline webkit-playsinline crossorigin="anonymous"></video>
+<!-- Tweede video -->
+<video id="tweede-video" src="tweede.mp4" playsinline webkit-playsinline crossorigin="anonymous"></video>
+
 </a-assets>
 
 
@@ -299,6 +308,35 @@
                 }
             });
         }, { once: true });
+        </script>
+
+    <!-- Extra script voor keuze normaal/VR -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const sceneEl = document.querySelector('a-scene');
+            const normalBtn = document.getElementById('normalModeBtn');
+            const vrBtn = document.getElementById('vrModeBtn');
+
+            if (!normalBtn || !vrBtn || !sceneEl) return;
+
+            // Default: normaal scherm actief
+            normalBtn.classList.add('active');
+
+            // Normaal scherm: uit VR gaan als we erin zitten
+            normalBtn.addEventListener('click', function () {
+                if (sceneEl.is && sceneEl.is('vr-mode')) {
+                    sceneEl.exitVR();
+                }
+                normalBtn.classList.add('active');
+                vrBtn.classList.remove('active');
+            });
+
+            // VR-knop: A-Frame koppelt deze aan enterVR via vr-mode-ui
+            vrBtn.addEventListener('click', function () {
+                normalBtn.classList.remove('active');
+                vrBtn.classList.add('active');
+            });
+        });
     </script>
 </body>
 </html>
