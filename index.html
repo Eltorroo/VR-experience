@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <title>VR Kas Experience</title>
+    <!-- A-Frame library -->
+    <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
+</head>
+<body>
+    <a-scene background="color: #222">
+        <!-- Asset Management: Hier zet je later jouw eigen foto's en video's in -->
+        <a-assets>
+  <img id="intro-bg" src="startpagina.png" crossorigin="anonymous">
+
+  <img id="vraag-foto" src="https://via.placeholder.com/1024x512/005500/FFFFFF?text=Stelling+Foto" crossorigin="anonymous">
+
+  <!-- Eerste video -->
+  <video id="actie-video" src="Intro.mp4" playsinline webkit-playsinline crossorigin="anonymous"></video>
+
+  <!-- Tweede video -->
+  <video id="tweede-video" src="tweede.mp4" playsinline webkit-playsinline crossorigin="anonymous"></video>
+</a-assets>
+
+
+        <!-- Camera & Gaze Cursor -->
+        <a-entity camera look-controls position="0 1.6 0">
+            <a-entity cursor="fuse: true; fuseTimeout: 1500"
+                      raycaster="objects: .clickable"
+                      position="0 0 -1"
+                      geometry="primitive: ring; radiusInner: 0.02; radiusOuter: 0.03"
+                      material="color: white; shader: flat"
+                      animation__fusing="property: scale; to: 0.2 0.2 0.2; startEvents: fusing; dur: 1500; easing: easeInCubic"
+                      animation__click="property: scale; to: 1 1 1; startEvents: click; dur: 150; easing: easeInCubic"
+                      animation__leave="property: scale; to: 1 1 1; startEvents: mouseleave; dur: 150">
+            </a-entity>
+        </a-entity>
+
+        <!-- UI Container -->
+        <a-entity id="ui-container" position="0 1.5 -3">
+            <!-- Vraag / Tekst Paneel -->
+          <a-text id="question-text" value="Laden..." align="center"
+        position="0 1.6 0" width="4" color="#FFF"></a-text>
+
+
+           <!-- Foto Vlak - breder voor startpagina -->
+<a-image id="image-display"
+         position="0 0.2 0"
+         width="6.66"
+         height="2"
+         visible="false"></a-image>
+
+            
+            <!-- Video Vlak -->
+            <a-video id="video-display"
+         position="0 0.2 0"
+         width="5"
+         height="2.5"
+         visible="false"></a-video>
+
+            <!-- Container voor de Keuze Knoppen -->
+            <a-entity id="choices-container" position="0 -1 0"></a-entity>
+        </a-entity>
+
+    </a-scene>
+
+        <script>
+        // --- GAME ENGINE & STATE ---
+        const gameState = {
+            currentScene: 'scene0',
+            softMistakes: 0,
+            hardFail: false,
+            flags: []
+        };
+
+        // --- SCENES CONFIGURATIE ---
+        const scenesConfig = {
+            'scene0': {
+                type: 'intro',
+                text: 'Welkom bij de kastechniek-experience.\nKijk 1,5 seconde naar START om te beginnen.',
+                mediaType: 'image',
+                media: '#intro-bg',
+                choices: [
+                    { text: 'START', next: 'scene1_video' }
+                ]
+            },
+            'scene1_video': {
+                type: 'video',
+                text: 'Kijk naar de handelingen van de monteur...',
+                mediaType: 'video',
+                media: '#actie-video',
+                choices: [],
+                onVideoEnd: 'scene1_vraag'
+            },
+            'scene1_vraag': {
+                type: 'vraag',
+                text: 'Stelling: De monteur vergat de hoofdklep dicht te draaien.\nWat is de juiste actie?',
+                mediaType: 'image',
+                media: '#vraag-foto',
+                choices: [
+                    { text: 'Klep alsnog sluiten', next: 'scene1b_video', action: () => { gameState.flags.push('veiligheid_goed'); } },
+                    { text: 'Chef bellen',        next: 'scene1b_video', action: () => { gameState.softMistakes += 0.5; } },
+                    { text: 'Systeem resetten',   next: 'scene1b_video', action: () => { gameState.softMistakes++; } }
+                ]
+            },
+            'scene1b_video': {
+                type: 'video',
+                text: 'Kijk naar het tweede fragment...',
+                mediaType: 'video',
+                media: '#tweede-video',
+                choices: [],
+                onVideoEnd: 'scene2'
+            },
+            'scene2': {
+                type: 'keuze2',
+                text: 'Keuze 2: De kasbouw loopt vertraging op.\nHoe los je dit op?',
+                mediaType: 'image',
+                media: '#vraag-foto',
+                choices: [
+                    { text: 'Extra team inzetten', next: 'scene3', action: () => {} },
+                    { text: 'Stagiair alleen laten', next: 'scene3', action: () => {
+                        gameState.softMistakes++;
+                        if (gameState.softMistakes >= 2) gameState.hardFail = true;
+                    }},
+                    { text: 'Planning aanpassen', next: 'scene3', action: () => {} }
+                ]
+            },
+            'scene3': {
+                type: 'keuze3',
+                text: 'Keuze 3: Testfase installaties. Er klinkt een alarm!',
+                mediaType: 'image',
+                media: '#vraag-foto',
+                choices: () => {
+                    if (gameState.hardFail) {
+                        return [
+                            { text: 'Noodstop! (Herstel)', next: 'scene4', action: () => { gameState.hardFail = false; } },
+                            { text: 'Doordraaien (Fail)', next: 'fail_route', action: () => {} }
+                        ];
+                    } else {
+                        return [
+                            { text: 'Direct repareren', next: 'scene4', action: () => {} },
+                            { text: 'Melden aan de chef', next: 'scene4', action: () => {} }
+                        ];
+                    }
+                }
+            },
+            'scene4': {
+                type: 'keuze4',
+                text: 'Keuze 4: Optimalisatie van het klimaat.\nWelke instelling kies je?',
+                mediaType: 'image',
+                media: '#vraag-foto',
+                choices: [
+                    { text: 'Duurzaam (DAC focus)', next: 'scene5', action: () => { gameState.flags.push('operator'); } },
+                    { text: 'Maximale productie', next: 'scene5', action: () => {} }
+                ]
+            },
+            'scene5': {
+                type: 'keuze5',
+                text: 'Keuze 5: Laatste controle voor oplevering.\nCheck je alles nog een keer?',
+                mediaType: 'image',
+                media: '#vraag-foto',
+                choices: [
+                    { text: 'Uitgebreide check', next: 'einde', action: () => {} },
+                    { text: 'Gelijk opleveren', next: 'einde', action: () => { gameState.softMistakes++; } }
+                ]
+            },
+            'fail_route': {
+                type: 'einde',
+                text: 'Project Mislukt.\nEr zijn te veel kritieke fouten gemaakt tijdens de bouw.',
+                mediaType: 'image',
+                media: '#intro-bg',
+                choices: []
+            },
+            'einde': {
+                type: 'einde',
+                text: () => {
+                    if (gameState.hardFail || gameState.softMistakes >= 3) {
+                        return 'Resultaat: Matig (Fail-pad).\nDe kas draait, maar met veel storingen.';
+                    }
+                    if (gameState.softMistakes > 0) {
+                        return 'Resultaat: Prima (Ok-pad).\nJe hebt de kas goed draaiend gekregen!';
+                    }
+                    return 'Resultaat: Uitstekend (Top-pad)!\nEen perfecte en duurzame installatie afgeleverd.';
+                },
+                mediaType: 'image',
+                media: '#vraag-foto',
+                choices: []
+            }
+        };
+
+        // --- RENDER LOGICA ---
+        function renderChoices(choicesArray) {
+            const container = document.getElementById('choices-container');
+            container.innerHTML = '';
+
+            if (!choicesArray || choicesArray.length === 0) return;
+
+            const total = choicesArray.length;
+            const spacing = 1.4;
+            const startX = -(total - 1) * spacing / 2;
+
+            choicesArray.forEach((choice, index) => {
+                const x = startX + (index * spacing);
+                const choiceEl = document.createElement('a-entity');
+                choiceEl.setAttribute('position', `${x} 0 0`);
+
+                const plane = document.createElement('a-plane');
+                plane.setAttribute('class', 'clickable');
+                plane.setAttribute('width', '1.2');
+                plane.setAttribute('height', '0.5');
+                plane.setAttribute('color', '#004488');
+                plane.setAttribute('animation__hover', 'property: color; to: #0077FF; startEvents: mouseenter; dur: 200');
+                plane.setAttribute('animation__leave', 'property: color; to: #004488; startEvents: mouseleave; dur: 200');
+
+                const text = document.createElement('a-text');
+                text.setAttribute('value', choice.text);
+                text.setAttribute('align', 'center');
+                text.setAttribute('position', '0 0 0.01');
+                text.setAttribute('color', '#FFF');
+                text.setAttribute('width', '3');
+
+                choiceEl.appendChild(plane);
+                choiceEl.appendChild(text);
+
+                plane.addEventListener('click', () => {
+                    if (choice.action) choice.action();
+                    goToScene(choice.next);
+                });
+
+                container.appendChild(choiceEl);
+            });
+        }
+
+        function goToScene(sceneId) {
+            gameState.currentScene = sceneId;
+            const sceneData = scenesConfig[sceneId];
+
+            const textValue = typeof sceneData.text === 'function' ? sceneData.text() : sceneData.text;
+            document.getElementById('question-text').setAttribute('value', textValue);
+
+            const imageEl = document.getElementById('image-display');
+            const videoEl = document.getElementById('video-display');
+
+            // Pauzeer alle video's
+            document.querySelectorAll('video').forEach(vid => {
+                vid.pause();
+                vid.currentTime = 0;
+                vid.onended = null;
+            });
+
+            if (sceneData.mediaType === 'video') {
+                imageEl.setAttribute('visible', 'false');
+                videoEl.setAttribute('visible', 'true');
+                videoEl.setAttribute('src', sceneData.media);
+
+                // Korte vertraging (100ms) voordat we play() aanroepen
+                // Dit helpt WebGL om niet in paniek te raken door plotselinge bronwissels
+                setTimeout(() => {
+                    const videoAsset = document.querySelector(sceneData.media);
+                    if (videoAsset) {
+                        const p = videoAsset.play();
+                        if (p !== undefined) {
+                            p.catch(err => console.log('Video play error:', err));
+                        }
+                        videoAsset.onended = () => {
+                            if (sceneData.onVideoEnd) {
+                                goToScene(sceneData.onVideoEnd);
+                            }
+                        };
+                    }
+                }, 100);
+
+            } else {
+                videoEl.setAttribute('visible', 'false');
+                if (sceneData.media) {
+                    imageEl.setAttribute('visible', 'true');
+                    // Direct de src van het src attribuut forceren in WebGL
+                    imageEl.setAttribute('src', sceneData.media);
+                } else {
+                    imageEl.setAttribute('visible', 'false');
+                }
+            }
+
+            const choicesArray = typeof sceneData.choices === 'function' ? sceneData.choices() : (sceneData.choices || []);
+            renderChoices(choicesArray);
+        }
+
+        // INITIALISATIE
+        document.querySelector('a-scene').addEventListener('loaded', function () {
+            // Pas als de A-Frame wereld getekend is, zetten we de boel aan
+            goToScene('scene0');
+        });
+
+        // Gebruikers-interactie fix: unlock media op eerste muisklik of screen-tap
+        document.body.addEventListener('click', function () {
+            document.querySelectorAll('video').forEach(v => {
+                if (v.paused) {
+                    v.muted = true;
+                    v.play().then(() => v.pause()).catch(() => {});
+                }
+            });
+        }, { once: true });
+    </script>
+</body>
+</html>
