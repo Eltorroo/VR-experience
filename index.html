@@ -5,6 +5,42 @@
     <title>VR Kas Experience</title>
     <!-- A-Frame library -->
     <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+                         Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: #0b1723; /* donkerblauw-groenige achtergrond */
+            color: #ffffff;
+        }
+
+        #mode-selector button {
+            background-color: #0b7c58;   /* primaire groen (Cogas-achtig) */
+            color: #ffffff;
+            border: none;
+            padding: 8px 14px;
+            margin-right: 8px;
+            border-radius: 4px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        #mode-selector button.active {
+            background-color: #095b42;   /* iets donkerder als actief */
+        }
+
+        #mode-selector button:hover {
+            background-color: #12a06f;   /* iets lichter bij hover */
+        }
+
+
+/* Maurice accentkleur voor speciale knoppen */
+        .maurice-accent {
+            background-color: #f5a623;  /* warme Maurice-achtige oranje/geel */
+            color: #ffffff;
+        }
+    </style>
 </head>
 <body>
      <!-- Moduskeuze: standaard normaal scherm -->
@@ -33,7 +69,7 @@
 
         <!-- Camera & Gaze Cursor -->
         <a-entity camera look-controls position="0 1.6 0">
-            <a-entity cursor="fuse: true; fuseTimeout: 1500"
+            <a-entity cursor="fuse: true; fuseTimeout: 2000"
                       raycaster="objects: .clickable"
                       position="0 0 -1"
                       geometry="primitive: ring; radiusInner: 0.02; radiusOuter: 0.03"
@@ -48,7 +84,10 @@
         <a-entity id="ui-container" position="0 1.5 -3">
             <!-- Vraag / Tekst Paneel -->
           <a-text id="question-text" value="Laden..." align="center"
-        position="0 1.6 0" width="4" color="#FFF"></a-text>
+        position="0 1.6 0" width="4"
+        color="#f5f7fa"></a-text>
+
+
 
 
            <!-- Foto Vlak - breder voor startpagina -->
@@ -85,7 +124,7 @@
         const scenesConfig = {
             'scene0': {
                 type: 'intro',
-                text: 'Welkom bij de kastechniek-experience.\nKijk 1,5 seconde naar START om te beginnen.',
+                text: 'Welkom bij de kastechniek-experience.\nKijk 2 seconde naar START om te beginnen.',
                 mediaType: 'image',
                 media: '#intro-bg',
                 choices: [
@@ -196,62 +235,80 @@
             }
         };
 
-        // --- RENDER LOGICA ---
+               // --- RENDER LOGICA ---
         function renderChoices(choicesArray) {
-    const container = document.getElementById('choices-container');
-    container.innerHTML = '';
+            const container = document.getElementById('choices-container');
+            container.innerHTML = '';
 
-    if (!choicesArray || choicesArray.length === 0) return;
+            if (!choicesArray || choicesArray.length === 0) return;
 
-    const total = choicesArray.length;
-    const spacing = 1.4;
-    const startX = -(total - 1) * spacing / 2;
+            const total = choicesArray.length;
+            const spacing = 1.4;
+            const startX = -(total - 1) * spacing / 2;
 
-    choicesArray.forEach((choice, index) => {
-        const x = startX + (index * spacing);
-        const choiceEl = document.createElement('a-entity');
+            choicesArray.forEach((choice, index) => {
+                const x = startX + (index * spacing);
+                const choiceEl = document.createElement('a-entity');
 
-        // Standaard waarden voor alle scenes
-        let y = 0;
-        let width = 1.2;
-        let height = 0.5;
+                // Standaard waarden voor alle scenes
+                let y = 0;
+                let width = 1.2;
+                let height = 0.5;
 
-        // Speciale stijl voor de START-knop op de beginpagina (scene0)
-        if (gameState.currentScene === 'scene0') {
-            y = -0.4;    // iets lager onder de foto
-            width = 2;   // breder
-            height = 0.8; // hoger
+                // Speciale stijl voor de START-knop op de beginpagina (scene0)
+                if (gameState.currentScene === 'scene0') {
+                    y = -0.6;     // duidelijk onder de foto
+                    width = 2.2;  // groter/breder
+                    height = 0.8; // hoger
+                }
+
+                choiceEl.setAttribute('position', `${x} ${y} 0`);
+
+                                const plane = document.createElement('a-plane');
+                plane.setAttribute('class', 'clickable');
+                plane.setAttribute('width', width);
+                plane.setAttribute('height', height);
+
+                // Standaard Cogas-groen
+                let baseColor = '#0b7c58';
+                let hoverColor = '#12a06f';
+
+                // Maurice-accent voor eindscene
+                if (gameState.currentScene === 'einde') {
+                    baseColor = '#f5a623';   // warme oranje/geel
+                    hoverColor = '#f8bf4a';  // iets lichtere variant
+                }
+
+                plane.setAttribute('color', baseColor);
+                plane.setAttribute(
+                  'animation__hover',
+                  `property: color; to: ${hoverColor}; startEvents: mouseenter; dur: 200`
+                );
+                plane.setAttribute(
+                  'animation__leave',
+                  `property: color; to: ${baseColor}; startEvents: mouseleave; dur: 200`
+                );
+
+
+
+                const text = document.createElement('a-text');
+                text.setAttribute('value', choice.text);
+                text.setAttribute('align', 'center');
+                text.setAttribute('position', '0 0 0.01');
+                text.setAttribute('color', '#FFF');
+                text.setAttribute('width', '3');
+
+                choiceEl.appendChild(plane);
+                choiceEl.appendChild(text);
+
+                plane.addEventListener('click', () => {
+                    if (choice.action) choice.action();
+                    goToScene(choice.next);
+                });
+
+                container.appendChild(choiceEl);
+            });
         }
-
-        choiceEl.setAttribute('position', `${x} ${y} 0`);
-
-        const plane = document.createElement('a-plane');
-        plane.setAttribute('class', 'clickable');
-        plane.setAttribute('width', width);
-        plane.setAttribute('height', height);
-        plane.setAttribute('color', '#004488');
-        plane.setAttribute('animation__hover', 'property: color; to: #0077FF; startEvents: mouseenter; dur: 200');
-        plane.setAttribute('animation__leave', 'property: color; to: #004488; startEvents: mouseleave; dur: 200`);
-
-        const text = document.createElement('a-text');
-        text.setAttribute('value', choice.text);
-        text.setAttribute('align', 'center');
-        text.setAttribute('position', '0 0 0.01');
-        text.setAttribute('color', '#FFF');
-        text.setAttribute('width', '3');
-
-        choiceEl.appendChild(plane);
-        choiceEl.appendChild(text);
-
-        plane.addEventListener('click', () => {
-            if (choice.action) choice.action();
-            goToScene(choice.next);
-        });
-
-        container.appendChild(choiceEl);
-    });
-}
-
 
         function goToScene(sceneId) {
             gameState.currentScene = sceneId;
