@@ -70,6 +70,23 @@
 <!-- Vierde video -->
 <video id="vierde-video" src="vierde.mp4" playsinline webkit-playsinline crossorigin="anonymous"></video>
 
+<!-- Vijfde video -->
+<video id="vijfde-video" src="vijfde.mp4" playsinline webkit-playsinline crossorigin="anonymous"></video>
+
+<!-- Zesde video -->
+<video id="zesde-video" src="zesde.mp4" playsinline webkit-playsinline crossorigin="anonymous"></video>
+
+<!-- Zevende video -->
+<video id="zevende-video" src="zevende.mp4" playsinline webkit-playsinline crossorigin="anonymous"></video>
+
+<!-- Achtste video -->
+<video id="achtste-video" src="achtste.mp4" playsinline webkit-playsinline crossorigin="anonymous"></video>
+
+<!-- Negende video -->
+<video id="negende-video" src="negende.mp4" playsinline webkit-playsinline crossorigin="anonymous"></video>
+
+<!-- Tiende video -->
+<video id="tiende-video" src="tiende.mp4" playsinline webkit-playsinline crossorigin="anonymous"></video>
 
 </a-assets>
 
@@ -140,7 +157,7 @@
             },
             'scene1_video': {
                 type: 'video',
-                text: 'Kijk naar de handelingen van de monteur...',
+                text: 'Elk project begint met een zorgvuldige planning door onze engineers...',
                 mediaType: 'video',
                 media: '#actie-video',
                 choices: [],
@@ -148,18 +165,18 @@
             },
             'scene1_vraag': {
                 type: 'vraag',
-                text: 'Stelling: De monteur vergat de hoofdklep dicht te draaien.\nWat is de juiste actie?',
+                text: 'Stelling: Elke kas is hetzelfde, engineers kopiëren en plakken \nWat denk jij?',
                 mediaType: 'image',
                 media: '#vraag-foto',
                 choices: [
-                    { text: 'Klep alsnog sluiten', next: 'scene1b_video', action: () => { gameState.flags.push('veiligheid_goed'); } },
-                    { text: 'Chef bellen',        next: 'scene1b_video', action: () => { gameState.softMistakes += 0.5; } },
-                    { text: 'Systeem resetten',   next: 'scene1b_video', action: () => { gameState.softMistakes++; } }
+                    { text: 'Nee, elke teelt, locatie en klant hebben andere eisen', next: 'scene1b_video', action: () => { gameState.flags.push('veiligheid_goed'); } },
+                    { text: 'Ja, een kas is gewoon staal, aluminium en glas',        next: 'scene1b_video', action: () => { gameState.softMistakes += 0.5; } },
+                    { text: 'Ja, alleen de planten die erin staan verschillen',   next: 'scene1b_video', action: () => { gameState.softMistakes++; } }
                 ]
             },
             'scene1b_video': {
                 type: 'video',
-                text: 'Kijk naar het tweede fragment...',
+                text: 'Onze verkoper maakt afspraken met de klant, elke tuinder heeft een eigen strategie en veel wensen',
                 mediaType: 'video',
                 media: '#tweede-video',
                 choices: [],
@@ -167,21 +184,21 @@
             },
                         'scene2': {
                 type: 'keuze2',
-                text: 'Keuze 2: De kasbouw loopt vertraging op.\\nHoe los je dit op?',
+                text: 'Keuze 2: De klant heeft duidelijke verwachtingen en eisen.\\nWat gebeurt er met deze info?',
                 mediaType: 'image',
                 media: '#vraag-foto',
                 choices: [
-                    { text: 'Extra team inzetten', next: 'scene2_video', action: () => {} },
-                    { text: 'Stagiair alleen laten', next: 'scene2_video', action: () => {
+                    { text: 'Dit sturen we door naar een bedrijf dat alles voor ons maakt', next: 'scene2_video', action: () => {} },
+                    { text: 'Dit gaat het ene oor in en andere oor eruit', next: 'scene2_video', action: () => {
                         gameState.softMistakes++;
                         if (gameState.softMistakes >= 2) gameState.hardFail = true;
                     }},
-                    { text: 'Planning aanpassen', next: 'scene2_video', action: () => {} }
+                    { text: 'Dit gaat naar onze fabriek, waar alles op maat gemaakt wordt', next: 'scene2_video', action: () => {} }
                 ]
             },
             'scene2_video': {
                 type: 'video',
-                text: 'Kijk naar het derde fragment...',
+                text: 'De info van de klant, wordt door onze engineers omgezet naar tekeningen voor de fabriek. Daar gaan onze technische mee mensen aan de slag!',
                 mediaType: 'video',
                 media: '#derde-video',
                 choices: [],
@@ -190,14 +207,14 @@
 
            'scene3': {
     type: 'keuze3',
-    text: 'Keuze 3: Testfase installaties. Er klinkt een alarm!',
+    text: 'Keuze 3: Jij staat nu in de fabriek en denkt dat een engineer een tekenfout heeft gemaakt.\\nWat doe je?',
     mediaType: 'image',
     media: '#vraag-foto',
     choices: () => {
         if (gameState.hardFail) {
             return [
-                { text: 'Noodstop! (Herstel)', next: 'scene3_video', action: () => { gameState.hardFail = false; } },
-                { text: 'Doordraaien (Fail)', next: 'fail_route', action: () => {} }
+                { text: 'Iedereen kan fouten maken, ik geef het netjes aan!(Herstel)', next: 'scene3_video', action: () => { gameState.hardFail = false; } },
+                { text: 'De engineers maken geen fouten, ik zeg niks. (Fail)', next: 'fail_route', action: () => {} }
             ];
         } else {
             return [
@@ -217,25 +234,83 @@
             },
 
             'scene4': {
-                type: 'keuze4',
-                text: 'Keuze 4: Optimalisatie van het klimaat.\nWelke instelling kies je?',
-                mediaType: 'image',
-                media: '#vraag-foto',
-                choices: [
-                    { text: 'Duurzaam (DAC focus)', next: 'scene5', action: () => { gameState.flags.push('operator'); } },
-                    { text: 'Maximale productie', next: 'scene5', action: () => {} }
-                ]
+    type: 'keuze4',
+    text: 'Keuze 4: Optimalisatie van het klimaat.\\nWelke instelling kies je?',
+    mediaType: 'image',
+    media: '#vraag-foto',
+    choices: [
+        { text: 'Duurzaam (DAC focus)', next: 'scene4_video1', action: () => { gameState.flags.push('operator'); } },
+        { text: 'Maximale productie', next: 'scene4_video1', action: () => {} }
+    ]
+},
+
+
+            'scene4_video1': {
+                type: 'video',
+                text: 'Kijk naar het vijfde fragment...',
+                mediaType: 'video',
+                media: '#vijfde-video',
+                choices: [],
+                onVideoEnd: 'scene4_video2'
             },
+
+            'scene4_video2': {
+                type: 'video',
+                text: 'Kijk naar het zesde fragment...',
+                mediaType: 'video',
+                media: '#zesde-video',
+                choices: [],
+                onVideoEnd: 'scene5'
+            },
+
             'scene5': {
-                type: 'keuze5',
-                text: 'Keuze 5: Laatste controle voor oplevering.\nCheck je alles nog een keer?',
-                mediaType: 'image',
-                media: '#vraag-foto',
-                choices: [
-                    { text: 'Uitgebreide check', next: 'einde', action: () => {} },
-                    { text: 'Gelijk opleveren', next: 'einde', action: () => { gameState.softMistakes++; } }
-                ]
+    type: 'keuze5',
+    text: 'Keuze 5: Laatste controle voor oplevering.\\nCheck je alles nog een keer?',
+    mediaType: 'image',
+    media: '#vraag-foto',
+    choices: [
+        { text: 'Uitgebreide check', next: 'scene5_video1', action: () => {} },
+        { text: 'Gelijk opleveren', next: 'scene5_video1', action: () => { gameState.softMistakes++; } }
+    ]
+},
+
+
+            'scene5_video1': {
+                type: 'video',
+                text: 'Kijk naar het zevende fragment...',
+                mediaType: 'video',
+                media: '#zevende-video',
+                choices: [],
+                onVideoEnd: 'scene5_video2'
             },
+
+            'scene5_video2': {
+                type: 'video',
+                text: 'Kijk naar het achtste fragment...',
+                mediaType: 'video',
+                media: '#achtste-video',
+                choices: [],
+                onVideoEnd: 'scene5_video3'
+            },
+
+            'scene5_video3': {
+                type: 'video',
+                text: 'Kijk naar het negende fragment...',
+                mediaType: 'video',
+                media: '#negende-video',
+                choices: [],
+                onVideoEnd: 'scene5_video4'
+            },
+
+            'scene5_video4': {
+                type: 'video',
+                text: 'Kijk naar het tiende fragment...',
+                mediaType: 'video',
+                media: '#tiende-video',
+                choices: [],
+                onVideoEnd: 'einde'
+            },
+
             'fail_route': {
                 type: 'einde',
                 text: 'Project Mislukt.\nEr zijn te veel kritieke fouten gemaakt tijdens de bouw.',
