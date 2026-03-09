@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <title>VR Kas Experience</title>
-    <!-- A-Frame library -->
     <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
 
     <style>
@@ -42,34 +41,29 @@
     </style>
 </head>
 <body>
-    <!-- Moduskeuze: standaard normaal scherm -->
-    <div id="mode-selector" style="position: fixed; top: 10px; left: 10px; z-index: 9999;">
+     <div id="mode-selector" style="position: fixed; top: 10px; left: 10px; z-index: 9999;">
         <button id="normalModeBtn">Normaal scherm</button>
         <button id="vrModeBtn">VR bril</button>
     </div>
+    
+    <a-scene background="color: #222" device-orientation-permission-ui="enabled: true">
 
-    <a-scene background="color: #222"
-             device-orientation-permission-ui="enabled: true">
-
-        <!-- Asset Management -->
         <a-assets>
             <img id="intro-bg" src="startpagina.png" crossorigin="anonymous">
             <img id="vraag-foto" src="https://via.placeholder.com/1024x512/005500/FFFFFF?text=Stelling+Foto" crossorigin="anonymous">
 
-            <!-- Video's -->
-            <video id="actie-video"   src="intro.mp4"    playsinline webkit-playsinline crossorigin="anonymous"></video>
-            <video id="tweede-video"  src="tweede.mp4"   playsinline webkit-playsinline crossorigin="anonymous"></video>
-            <video id="derde-video"   src="derde.mp4"    playsinline webkit-playsinline crossorigin="anonymous"></video>
-            <video id="vierde-video"  src="vierde.mp4"   playsinline webkit-playsinline crossorigin="anonymous"></video>
-            <video id="vijfde-video"  src="vijfde.mp4"   playsinline webkit-playsinline crossorigin="anonymous"></video>
-            <video id="zesde-video"   src="zesde.mp4"    playsinline webkit-playsinline crossorigin="anonymous"></video>
-            <video id="zevende-video" src="zevende.mp4"  playsinline webkit-playsinline crossorigin="anonymous"></video>
-            <video id="achtste-video" src="achtste.mp4"  playsinline webkit-playsinline crossorigin="anonymous"></video>
-            <video id="negende-video" src="negende.mp4"  playsinline webkit-playsinline crossorigin="anonymous"></video>
-            <video id="tiende-video"  src="tiende.mp4"   playsinline webkit-playsinline crossorigin="anonymous"></video>
+            <video id="actie-video" src="intro.mp4" playsinline webkit-playsinline crossorigin="anonymous"></video>
+            <video id="tweede-video" src="tweede.mp4" playsinline webkit-playsinline crossorigin="anonymous"></video>
+            <video id="derde-video" src="derde.mp4" playsinline webkit-playsinline crossorigin="anonymous"></video>
+            <video id="vierde-video" src="vierde.mp4" playsinline webkit-playsinline crossorigin="anonymous"></video>
+            <video id="vijfde-video" src="vijfde.mp4" playsinline webkit-playsinline crossorigin="anonymous"></video>
+            <video id="zesde-video" src="zesde.mp4" playsinline webkit-playsinline crossorigin="anonymous"></video>
+            <video id="zevende-video" src="zevende.mp4" playsinline webkit-playsinline crossorigin="anonymous"></video>
+            <video id="achtste-video" src="achtste.mp4" playsinline webkit-playsinline crossorigin="anonymous"></video>
+            <video id="negende-video" src="negende.mp4" playsinline webkit-playsinline crossorigin="anonymous"></video>
+            <video id="tiende-video" src="tiende.mp4" playsinline webkit-playsinline crossorigin="anonymous"></video>
         </a-assets>
 
-        <!-- Camera & Gaze Cursor -->
         <a-entity camera look-controls position="0 1.6 0">
             <a-entity cursor="fuse: true; fuseTimeout: 2000"
                       raycaster="objects: .clickable"
@@ -82,29 +76,25 @@
             </a-entity>
         </a-entity>
 
-        <!-- UI Container -->
         <a-entity id="ui-container" position="0 1.5 -3">
-            <!-- Vraag / Tekst Paneel -->
+            
             <a-text id="question-text" value="Laden..." align="center"
-                    position="0 1.6 0" width="4"
+                    position="0 1.8 0" width="4.5" wrap-count="45"
                     color="#f5f7fa"></a-text>
 
-            <!-- Foto Vlak - breder voor startpagina -->
             <a-image id="image-display"
-                     position="0 0.2 0"
+                     position="0 0.4 0"
                      width="6.66"
                      height="2"
                      visible="false"></a-image>
 
-            <!-- Video Vlak -->
             <a-video id="video-display"
-                     position="0 0.2 0"
+                     position="0 0.4 0"
                      width="5"
                      height="2.5"
                      visible="false"></a-video>
 
-            <!-- Container voor de Keuze Knoppen -->
-            <a-entity id="choices-container" position="0 -1 0"></a-entity>
+            <a-entity id="choices-container" position="0 -0.8 0"></a-entity>
         </a-entity>
 
     </a-scene>
@@ -118,351 +108,193 @@
             flags: []
         };
 
+        // Acties voor de 3 keuzes
+        const actieCorrect = () => {};
+        const actieSoftFail = () => { gameState.softMistakes++; };
+        const actieHardFail = () => { gameState.hardFail = true; };
+
         // --- SCENES CONFIGURATIE ---
         const scenesConfig = {
-            // START
             'scene0': {
                 type: 'intro',
                 text: 'Welkom bij de kastechniek-experience.\nKijk 2 seconde naar START om te beginnen.',
                 mediaType: 'image',
                 media: '#intro-bg',
                 choices: [
-                    { text: 'START', next: 'scene1_video' }
+                    { text: 'START', next: 'video1' }
                 ]
             },
 
-            // VIDEO 1 – Planning/engineering
-            'scene1_video': {
-                type: 'video',
-                text: 'Elk project begint met een zorgvuldige planning door onze engineers...',
-                mediaType: 'video',
-                media: '#actie-video',
-                choices: [],
-                onVideoEnd: 'scene1_vraag'
+            // --- DEEL 1 ---
+            'video1': {
+                type: 'video', text: 'Elk project begint met een zorgvuldige planning door onze engineers...',
+                mediaType: 'video', media: '#actie-video', choices: [], onVideoEnd: 'vraag1'
             },
-            'scene1_vraag': {
-                type: 'vraag',
-                text: 'Stelling: Elke kas is hetzelfde, engineers kopiëren en plakken.\nWat denk jij?',
-                mediaType: 'image',
-                media: '#vraag-foto',
+            'vraag1': {
+                type: 'vraag', text: 'Vraag 1: Elke kas is hetzelfde, engineers kopiëren en plakken.\nWat denk jij?',
+                mediaType: 'image', media: '#vraag-foto',
                 choices: [
-                    { // GOED
-                      text: 'Nee, elke teelt, locatie en klant hebben andere eisen',
-                      next: 'scene1b_video',
-                      action: () => { gameState.flags.push('veiligheid_goed'); }
-                    },
-                    { // SOFT FAIL
-                      text: 'Ja, een kas is gewoon staal, aluminium en glas',
-                      next: 'scene1b_video',
-                      action: () => { gameState.softMistakes += 0.5; }
-                    },
-                    { // HARD FAIL (iets zwaardere fout)
-                      text: 'Ja, alleen de planten die erin staan verschillen',
-                      next: 'scene1b_video',
-                      action: () => { gameState.softMistakes++; }
-                    }
+                    { text: 'Nee, elke teelt, locatie en klant hebben andere eisen', next: 'video2', action: actieCorrect },
+                    { text: 'Ja, een kas is gewoon staal, aluminium en glas', next: 'video2', action: actieSoftFail },
+                    { text: 'Ja, alleen de planten die erin staan verschillen', next: 'video2', action: actieHardFail }
                 ]
             },
 
-            // VIDEO 2 – Verkoper bij klant
-            'scene1b_video': {
-                type: 'video',
-                text: 'Onze verkoper maakt afspraken met de klant, elke tuinder heeft een eigen strategie en veel wensen.',
-                mediaType: 'video',
-                media: '#tweede-video',
-                choices: [],
-                onVideoEnd: 'scene2'
+            // --- DEEL 2 ---
+            'video2': {
+                type: 'video', text: 'Onze verkoper maakt afspraken met de klant, elke tuinder heeft eigen wensen.',
+                mediaType: 'video', media: '#tweede-video', choices: [], onVideoEnd: 'vraag2'
             },
-            'scene2': {
-                type: 'vraag',
-                text: 'De klant heeft duidelijke verwachtingen en eisen.\nWat gebeurt er met deze info technisch gezien?',
-                mediaType: 'image',
-                media: '#vraag-foto',
+            'vraag2': {
+                type: 'vraag', text: 'Vraag 2: De klant heeft duidelijke verwachtingen en eisen.\nWat gebeurt er met deze info?',
+                mediaType: 'image', media: '#vraag-foto',
                 choices: [
-                    { // GOED
-                      text: 'Onze engineers maken hiermee tekeningen voor onze eigen fabriek',
-                      next: 'scene2_video',
-                      action: () => {}
-                    },
-                    { // SOFT FAIL
-                      text: 'We sturen het naar een willekeurig bedrijf dat maar wat staal levert',
-                      next: 'scene2_video',
-                      action: () => { gameState.softMistakes += 0.5; }
-                    },
-                    { // HARD FAIL
-                      text: 'We doen er weinig mee, iedereen werkt gewoon zijn standaardlijst af',
-                      next: 'scene2_video',
-                      action: () => {
-                          gameState.softMistakes++;
-                          if (gameState.softMistakes >= 2) gameState.hardFail = true;
-                      }
-                    }
+                    { text: 'Dit gaat naar onze fabriek, waar alles op maat gemaakt wordt', next: 'video3', action: actieCorrect },
+                    { text: 'Dit sturen we door naar een extern bedrijf dat alles voor ons maakt', next: 'video3', action: actieSoftFail },
+                    { text: 'Dit gaat het ene oor in en andere oor eruit', next: 'video3', action: actieHardFail }
                 ]
             },
 
-            // VIDEO 3 – Fabriek / staalproductie
-            'scene2_video': {
-                type: 'video',
-                text: 'De info van de klant wordt door onze engineers omgezet naar tekeningen voor de fabriek. Daar gaan onze technische mensen mee aan de slag!',
-                mediaType: 'video',
-                media: '#derde-video',
-                choices: [],
-                onVideoEnd: 'scene3'
+            // --- DEEL 3 ---
+            'video3': {
+                type: 'video', text: 'De info wordt door engineers omgezet naar tekeningen voor de fabriek.',
+                mediaType: 'video', media: '#derde-video', choices: [], onVideoEnd: 'vraag3'
             },
-            'scene3': {
-                type: 'vraag',
-                text: 'Jij staat nu in de fabriek bij het staal.\nWat is hier technisch het belangrijkst?',
-                mediaType: 'image',
-                media: '#vraag-foto',
+            'vraag3': {
+                type: 'vraag', text: 'Vraag 3: Je staat in de fabriek en denkt dat een engineer een tekenfout heeft gemaakt.\nWat doe je?',
+                mediaType: 'image', media: '#vraag-foto',
                 choices: [
-                    { // GOED
-                      text: 'Nauwkeurig volgens tekening meten, zagen en lassen',
-                      next: 'scene3_video',
-                      action: () => {}
-                    },
-                    { // SOFT FAIL
-                      text: 'Zo snel mogelijk werken, ook als het niet precies past',
-                      next: 'scene3_video',
-                      action: () => { gameState.softMistakes += 0.5; }
-                    },
-                    { // HARD FAIL
-                      text: 'De engineers maken geen fouten, ik check niks en zeg niks',
-                      next: 'fail_route',
-                      action: () => { gameState.hardFail = true; }
-                    }
+                    { text: 'Ik meld dit netjes bij de engineer of chef om het aan te passen', next: 'video4', action: actieCorrect },
+                    { text: 'Ik probeer het direct zelf op te lossen zonder overleg', next: 'video4', action: actieSoftFail },
+                    { text: 'De engineers maken geen fouten, ik negeer het en zeg niks', next: 'video4', action: actieHardFail }
                 ]
             },
 
-            // VIDEO 4 – Vervolg fabriek / bouwvoorbereiding
-            'scene3_video': {
-                type: 'video',
-                text: 'Kijk naar het vierde fragment...',
-                mediaType: 'video',
-                media: '#vierde-video',
-                choices: [],
-                onVideoEnd: 'scene4'
+            // --- DEEL 4 ---
+            'video4': {
+                type: 'video', text: 'Kijk mee naar de opbouw...',
+                mediaType: 'video', media: '#vierde-video', choices: [], onVideoEnd: 'vraag4'
             },
-            'scene4': {
-                type: 'vraag',
-                text: 'In deze fase bereiden we de bouw voor.\nWat is nu het slimste om te doen?',
-                mediaType: 'image',
-                media: '#vraag-foto',
+            'vraag4': {
+                type: 'vraag', text: 'Vraag 4: Optimalisatie van het klimaat.\nWelke instelling kies je in de software?',
+                mediaType: 'image', media: '#vraag-foto',
                 choices: [
-                    { // GOED (placeholder inhoud)
-                      text: 'Zorgen dat alle onderdelen gelabeld en compleet zijn',
-                      next: 'scene4_video1',
-                      action: () => {}
-                    },
-                    { // SOFT FAIL
-                      text: 'We nemen aan dat alles wel ongeveer zal kloppen',
-                      next: 'scene4_video1',
-                      action: () => { gameState.softMistakes += 0.5; }
-                    },
-                    { // HARD FAIL
-                      text: 'We laden alles willekeurig op en zien op de bouw wel verder',
-                      next: 'scene4_video1',
-                      action: () => { gameState.softMistakes++; }
-                    }
+                    { text: 'Duurzaam met een focus op energiebesparing (DAC focus)', next: 'video5', action: actieCorrect },
+                    { text: 'Maximale productie zonder te kijken naar het energieverbruik', next: 'video5', action: actieSoftFail },
+                    { text: 'Ik zet handmatig alles op 100% voor het snelste resultaat', next: 'video5', action: actieHardFail }
                 ]
             },
 
-            // VIDEO 5 – Klimaat / klimaatinstellingen (jouw DAC vs productie)
-            'scene4_video1': {
-                type: 'video',
-                text: 'Kijk naar het vijfde fragment...',
-                mediaType: 'video',
-                media: '#vijfde-video',
-                choices: [],
-                onVideoEnd: 'scene4_vraag'
+            // --- DEEL 5 ---
+            'video5': {
+                type: 'video', text: 'De bouw nadert zijn einde...',
+                mediaType: 'video', media: '#vijfde-video', choices: [], onVideoEnd: 'vraag5'
             },
-            'scene4_vraag': {
-                type: 'vraag',
-                text: 'Optimalisatie van het klimaat.\nWelke instelling past het beste bij dit project?',
-                mediaType: 'image',
-                media: '#vraag-foto',
+            'vraag5': {
+                type: 'vraag', text: 'Vraag 5: Laatste controle voor oplevering.\nCheck je alles nog een keer?',
+                mediaType: 'image', media: '#vraag-foto',
                 choices: [
-                    { // GOED (jouw DAC-favoriet)
-                      text: 'Duurzaam (DAC focus, energie en klimaat in balans)',
-                      next: 'scene4_video2',
-                      action: () => { gameState.flags.push('operator'); }
-                    },
-                    { // SOFT FAIL
-                      text: 'Maximale productie, ongeacht energieverbruik',
-                      next: 'scene4_video2',
-                      action: () => { gameState.softMistakes += 0.5; }
-                    },
-                    { // HARD FAIL
-                      text: 'We stellen niks in, de kas regelt zichzelf wel',
-                      next: 'scene4_video2',
-                      action: () => { gameState.softMistakes++; }
-                    }
+                    { text: 'Ja, ik voer een uitgebreide visuele en technische check uit', next: 'video6', action: actieCorrect },
+                    { text: 'Ik doe alleen een snelle visuele ronde, het zal wel goed zijn', next: 'video6', action: actieSoftFail },
+                    { text: 'Nee, ik lever het direct op om tijd te besparen', next: 'video6', action: actieHardFail }
                 ]
             },
 
-            // VIDEO 6 – Verdere klimaat/bedrijfssituatie
-            'scene4_video2': {
-                type: 'video',
-                text: 'Kijk naar het zesde fragment...',
-                mediaType: 'video',
-                media: '#zesde-video',
-                choices: [],
-                onVideoEnd: 'scene5'
+            // --- DEEL 6 (CONCEPT) ---
+            'video6': {
+                type: 'video', text: 'Tijdens de inbedrijfstelling...',
+                mediaType: 'video', media: '#zesde-video', choices: [], onVideoEnd: 'vraag6'
             },
-            'scene5': {
-                type: 'vraag',
-                text: 'De kas draait bijna volledig.\nWaar let jij nu als laatste op?',
-                mediaType: 'image',
-                media: '#vraag-foto',
+            'vraag6': {
+                type: 'vraag', text: 'Vraag 6: Tijdens het testen hoor je een vreemd tikkend geluid bij de motoren.\nWat doe je?',
+                mediaType: 'image', media: '#vraag-foto',
                 choices: [
-                    { // GOED (past bij jouw “laatste controle”)
-                      text: 'Een uitgebreide check van installaties en veiligheid',
-                      next: 'scene5_video1',
-                      action: () => {}
-                    },
-                    { // SOFT FAIL
-                      text: 'Alleen kijken of de lampen het doen',
-                      next: 'scene5_video1',
-                      action: () => { gameState.softMistakes += 0.5; }
-                    },
-                    { // HARD FAIL
-                      text: 'Niets controleren, direct opleveren',
-                      next: 'scene5_video1',
-                      action: () => { gameState.softMistakes++; }
-                    }
+                    { text: 'Systeem veilig uitschakelen en de aandrijving fysiek controleren', next: 'video7', action: actieCorrect },
+                    { text: 'Even aankijken of het geluid vanzelf weer verdwijnt', next: 'video7', action: actieSoftFail },
+                    { text: 'De muziek harder zetten, een nieuwe motor moet even inslijten', next: 'video7', action: actieHardFail }
                 ]
             },
 
-            // VIDEO 7 – Oplevering / productie
-            'scene5_video1': {
-                type: 'video',
-                text: 'Kijk naar het zevende fragment...',
-                mediaType: 'video',
-                media: '#zevende-video',
-                choices: [],
-                onVideoEnd: 'scene5_vraag2'
+            // --- DEEL 7 (CONCEPT) ---
+            'video7': {
+                type: 'video', text: 'De klimaatbeheersing wordt geactiveerd...',
+                mediaType: 'video', media: '#zevende-video', choices: [], onVideoEnd: 'vraag7'
             },
-            'scene5_vraag2': {
-                type: 'vraag',
-                text: 'De kas wordt in gebruik genomen.\nWat vind jij nu het belangrijkst om in de gaten te houden?',
-                mediaType: 'image',
-                media: '#vraag-foto',
+            'vraag7': {
+                type: 'vraag', text: 'Vraag 7: De computer geeft een plotselinge temperatuuralarm.\nWat is je eerste actie?',
+                mediaType: 'image', media: '#vraag-foto',
                 choices: [
-                    { // GOED (placeholder)
-                      text: 'Of het klimaat en de techniek stabiel blijven draaien',
-                      next: 'scene5_video2',
-                      action: () => {}
-                    },
-                    { // SOFT FAIL
-                      text: 'Alleen of de kas er mooi uitziet op foto’s',
-                      next: 'scene5_video2',
-                      action: () => { gameState.softMistakes += 0.5; }
-                    },
-                    { // HARD FAIL
-                      text: 'We kijken nergens meer naar, het zal wel goed gaan',
-                      next: 'scene5_video2',
-                      action: () => { gameState.softMistakes++; }
-                    }
+                    { text: 'Op afstand de sensorwaarden uitlezen en een diagnose stellen', next: 'video8', action: actieCorrect },
+                    { text: 'Direct een monteur in de auto zetten zonder voorkennis', next: 'video8', action: actieSoftFail },
+                    { text: 'Het alarm resetten, systemen hebben vaak valse meldingen', next: 'video8', action: actieHardFail }
                 ]
             },
 
-            // VIDEO 8 – Storingen / service
-            'scene5_video2': {
-                type: 'video',
-                text: 'Kijk naar het achtste fragment...',
-                mediaType: 'video',
-                media: '#achtste-video',
-                choices: [],
-                onVideoEnd: 'scene5_vraag3'
+            // --- DEEL 8 (CONCEPT) ---
+            'video8': {
+                type: 'video', text: 'Innovatie en duurzaamheid in de kas...',
+                mediaType: 'video', media: '#achtste-video', choices: [], onVideoEnd: 'vraag8'
             },
-            'scene5_vraag3': {
-                type: 'vraag',
-                text: 'Er komt een storing binnen bij de klant.\nWat doe jij als techniekheld?',
-                mediaType: 'image',
-                media: '#vraag-foto',
+            'vraag8': {
+                type: 'vraag', text: 'Vraag 8: De tuinder twijfelt of hij LED-belichting moet toepassen.\nWat adviseer je?',
+                mediaType: 'image', media: '#vraag-foto',
                 choices: [
-                    { // GOED
-                      text: 'Snel analyseren, oorzaak zoeken en klant meenemen in oplossing',
-                      next: 'scene5_video3',
-                      action: () => {}
-                    },
-                    { // SOFT FAIL
-                      text: 'Alles één keer resetten en hopen dat het weg blijft',
-                      next: 'scene5_video3',
-                      action: () => { gameState.softMistakes += 0.5; }
-                    },
-                    { // HARD FAIL
-                      text: 'Niet reageren, het lost zich vast vanzelf op',
-                      next: 'scene5_video3',
-                      action: () => { gameState.softMistakes++; }
-                    }
+                    { text: 'Ik bereken de ROI en laat de voordelen voor de plantengroei zien', next: 'video9', action: actieCorrect },
+                    { text: 'Ik zeg dat hij het gewoon moet doen, LED is altijd beter', next: 'video9', action: actieSoftFail },
+                    { text: 'Ik raad het af, oude lampen werken toch ook nog prima?', next: 'video9', action: actieHardFail }
                 ]
             },
 
-            // VIDEO 9 – Resultaat / draaiende kas
-            'scene5_video3': {
-                type: 'video',
-                text: 'Kijk naar het negende fragment...',
-                mediaType: 'video',
-                media: '#negende-video',
-                choices: [],
-                onVideoEnd: 'scene5_vraag4'
+            // --- DEEL 9 (CONCEPT) ---
+            'video9': {
+                type: 'video', text: 'Onderhoud is cruciaal voor een lange levensduur...',
+                mediaType: 'video', media: '#negende-video', choices: [], onVideoEnd: 'vraag9'
             },
-            'scene5_vraag4': {
-                type: 'vraag',
-                text: 'De kas draait nu een tijdje.\nHoe kijk jij als techneut terug op dit project?',
-                mediaType: 'image',
-                media: '#vraag-foto',
+            'vraag9': {
+                type: 'vraag', text: 'Vraag 9: Hoe richten we het toekomstige onderhoud voor deze kas in?',
+                mediaType: 'image', media: '#vraag-foto',
                 choices: [
-                    { // GOED (reflectie/tevredenheid)
-                      text: 'Ik let op prestaties én leer van wat beter kan',
-                      next: 'scene5_video4',
-                      action: () => {}
-                    },
-                    { // SOFT FAIL
-                      text: 'Als het maar ongeveer draait, dat is genoeg',
-                      next: 'scene5_video4',
-                      action: () => { gameState.softMistakes += 0.5; }
-                    },
-                    { // HARD FAIL
-                      text: 'Ik kijk nergens meer naar, project afgesloten is afgesloten',
-                      next: 'scene5_video4',
-                      action: () => { gameState.softMistakes++; }
-                    }
+                    { text: 'Met een vast preventief onderhoudsschema volgens de handleiding', next: 'video10', action: actieCorrect },
+                    { text: 'We plannen af en toe wat in als we toevallig in de buurt zijn', next: 'video10', action: actieSoftFail },
+                    { text: 'Pas ingrijpen wanneer de tuinder belt dat alles stilstaat', next: 'video10', action: actieHardFail }
                 ]
             },
 
-            // VIDEO 10 – Slotfragment
-            'scene5_video4': {
-                type: 'video',
-                text: 'Kijk naar het tiende fragment...',
-                mediaType: 'video',
-                media: '#tiende-video',
-                choices: [],
-                onVideoEnd: 'einde'
+            // --- DEEL 10 (CONCEPT) ---
+            'video10': {
+                type: 'video', text: 'Het project is succesvol doorlopen.',
+                mediaType: 'video', media: '#tiende-video', choices: [], onVideoEnd: 'vraag10'
+            },
+            'vraag10': {
+                type: 'vraag', text: 'Vraag 10: Tijd voor de formele overdracht.\nHoe sluit je het af met de tuinder?',
+                mediaType: 'image', media: '#vraag-foto',
+                choices: [
+                    { text: 'Een eindevaluatie doen en alle documentatie netjes overdragen', next: 'einde', action: actieCorrect },
+                    { text: 'Sleutels inleveren, een handje schudden en snel door naar huis', next: 'einde', action: actieSoftFail },
+                    { text: 'Direct de eindfactuur sturen en verder niets meer van je laten horen', next: 'einde', action: actieHardFail }
+                ]
             },
 
-            // FAIL & EINDE
-            'fail_route': {
-                type: 'einde',
-                text: 'Project Mislukt.\nEr zijn te veel kritieke fouten gemaakt tijdens de bouw.',
-                mediaType: 'image',
-                media: '#intro-bg',
-                choices: []
-            },
+            // --- EINDE ---
             'einde': {
                 type: 'einde',
                 text: () => {
-                    if (gameState.hardFail || gameState.softMistakes >= 3) {
-                        return 'Resultaat: Matig (Fail-pad).\nDe kas draait, maar met veel storingen.';
+                    if (gameState.hardFail) {
+                        return 'Resultaat: Slecht.\nEr is een kritieke fout gemaakt (Hard Fail). De kas functioneert niet veilig.';
+                    }
+                    if (gameState.softMistakes >= 3) {
+                        return 'Resultaat: Matig.\nDe kas draait, maar met veel haken en ogen door slordige keuzes.';
                     }
                     if (gameState.softMistakes > 0) {
-                        return 'Resultaat: Prima (Ok-pad).\nJe hebt de kas goed draaiend gekregen!';
+                        return 'Resultaat: Prima.\nJe hebt de kas draaiend gekregen, op een paar kleine verbeterpuntjes na.';
                     }
-                    return 'Resultaat: Uitstekend (Top-pad)!\nEen perfecte en duurzame installatie afgeleverd.';
+                    return 'Resultaat: Uitstekend!\nEen perfecte, foutloze en duurzame installatie afgeleverd.';
                 },
                 mediaType: 'image',
-                media: '#vraag-foto',
-                choices: []
+                media: '#intro-bg',
+                choices: [
+                    { text: 'OPNIEUW SPELEN', next: 'scene0', action: () => { gameState.softMistakes = 0; gameState.hardFail = false; } }
+                ]
             }
         };
 
@@ -474,21 +306,35 @@
             if (!choicesArray || choicesArray.length === 0) return;
 
             const total = choicesArray.length;
-            const spacing = 1.4;
-            const startX = -(total - 1) * spacing / 2;
+            const isVraag = total === 3; // Bij 3 antwoorden bouwen we een verticale lijst voor meer tekst-ruimte
 
             choicesArray.forEach((choice, index) => {
-                const x = startX + (index * spacing);
                 const choiceEl = document.createElement('a-entity');
 
+                let x = 0;
                 let y = 0;
-                let width = 1.2;
+                let width = 1.5;
                 let height = 0.5;
 
-                if (gameState.currentScene === 'scene0') {
-                    y = -0.6;
-                    width = 2.2;
+                // Opmaak logica: Verticaal of grote start knop
+                if (gameState.currentScene === 'scene0' || gameState.currentScene === 'einde') {
+                    y = -0.5;
+                    width = 2.4;
                     height = 0.8;
+                } else if (isVraag) {
+                    // Verticale lijst, zorgt dat lange tekst er makkelijk in past
+                    x = 0;
+                    y = 0.5 - (index * 0.65);
+                    width = 4.2;  // Flink breed voor hele zinnen
+                    height = 0.5;
+                } else {
+                    // Fallback (bijv. 2 knoppen horizontaal)
+                    const spacing = 1.8;
+                    const startX = -(total - 1) * spacing / 2;
+                    x = startX + (index * spacing);
+                    y = 0;
+                    width = 1.6;
+                    height = 0.5;
                 }
 
                 choiceEl.setAttribute('position', `${x} ${y} 0`);
@@ -498,6 +344,7 @@
                 plane.setAttribute('width', width);
                 plane.setAttribute('height', height);
 
+                // Kleuren
                 let baseColor = '#0b7c58';
                 let hoverColor = '#12a06f';
 
@@ -507,21 +354,18 @@
                 }
 
                 plane.setAttribute('color', baseColor);
-                plane.setAttribute(
-                    'animation__hover',
-                    `property: color; to: ${hoverColor}; startEvents: mouseenter; dur: 200`
-                );
-                plane.setAttribute(
-                    'animation__leave',
-                    `property: color; to: ${baseColor}; startEvents: mouseleave; dur: 200`
-                );
+                plane.setAttribute('animation__hover', `property: color; to: ${hoverColor}; startEvents: mouseenter; dur: 200`);
+                plane.setAttribute('animation__leave', `property: color; to: ${baseColor}; startEvents: mouseleave; dur: 200`);
 
                 const text = document.createElement('a-text');
                 text.setAttribute('value', choice.text);
                 text.setAttribute('align', 'center');
                 text.setAttribute('position', '0 0 0.01');
                 text.setAttribute('color', '#FFF');
-                text.setAttribute('width', '3');
+                
+                // Tekst passend maken op de knop (breedte ietsjes korter dan de plane, en dynamische wrap-count)
+                text.setAttribute('width', width * 0.9);
+                text.setAttribute('wrap-count', isVraag ? '45' : '20');
 
                 choiceEl.appendChild(plane);
                 choiceEl.appendChild(text);
@@ -557,6 +401,7 @@
                 videoEl.setAttribute('visible', 'true');
                 videoEl.setAttribute('src', sceneData.media);
 
+                // Korte vertraging (100ms) voordat we play() aanroepen voor WebGL stabiliteit
                 setTimeout(() => {
                     const videoAsset = document.querySelector(sceneData.media);
                     if (videoAsset) {
@@ -582,9 +427,7 @@
                 }
             }
 
-            const choicesArray = typeof sceneData.choices === 'function'
-                ? sceneData.choices()
-                : (sceneData.choices || []);
+            const choicesArray = typeof sceneData.choices === 'function' ? sceneData.choices() : (sceneData.choices || []);
             renderChoices(choicesArray);
         }
 
@@ -593,7 +436,7 @@
             goToScene('scene0');
         });
 
-        // Media-unlock op eerste click/tap
+        // Gebruikers-interactie fix: unlock media
         document.body.addEventListener('click', function () {
             document.querySelectorAll('video').forEach(v => {
                 if (v.paused) {
@@ -604,7 +447,6 @@
         }, { once: true });
     </script>
 
-    <!-- Extra script voor keuze normaal/VR -->
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const sceneEl = document.querySelector('a-scene');
