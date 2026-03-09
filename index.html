@@ -198,46 +198,60 @@
 
         // --- RENDER LOGICA ---
         function renderChoices(choicesArray) {
-            const container = document.getElementById('choices-container');
-            container.innerHTML = '';
+    const container = document.getElementById('choices-container');
+    container.innerHTML = '';
 
-            if (!choicesArray || choicesArray.length === 0) return;
+    if (!choicesArray || choicesArray.length === 0) return;
 
-            const total = choicesArray.length;
-            const spacing = 1.4;
-            const startX = -(total - 1) * spacing / 2;
+    const total = choicesArray.length;
+    const spacing = 1.4;
+    const startX = -(total - 1) * spacing / 2;
 
-            choicesArray.forEach((choice, index) => {
-                const x = startX + (index * spacing);
-                const choiceEl = document.createElement('a-entity');
-                choiceEl.setAttribute('position', `${x} 0 0`);
+    choicesArray.forEach((choice, index) => {
+        const x = startX + (index * spacing);
+        const choiceEl = document.createElement('a-entity');
 
-                const plane = document.createElement('a-plane');
-                plane.setAttribute('class', 'clickable');
-                plane.setAttribute('width', '1.2');
-                plane.setAttribute('height', '0.5');
-                plane.setAttribute('color', '#004488');
-                plane.setAttribute('animation__hover', 'property: color; to: #0077FF; startEvents: mouseenter; dur: 200');
-                plane.setAttribute('animation__leave', 'property: color; to: #004488; startEvents: mouseleave; dur: 200');
+        // Standaard waarden voor alle scenes
+        let y = 0;
+        let width = 1.2;
+        let height = 0.5;
 
-                const text = document.createElement('a-text');
-                text.setAttribute('value', choice.text);
-                text.setAttribute('align', 'center');
-                text.setAttribute('position', '0 0 0.01');
-                text.setAttribute('color', '#FFF');
-                text.setAttribute('width', '3');
-
-                choiceEl.appendChild(plane);
-                choiceEl.appendChild(text);
-
-                plane.addEventListener('click', () => {
-                    if (choice.action) choice.action();
-                    goToScene(choice.next);
-                });
-
-                container.appendChild(choiceEl);
-            });
+        // Speciale stijl voor de START-knop op de beginpagina (scene0)
+        if (gameState.currentScene === 'scene0') {
+            y = -0.4;    // iets lager onder de foto
+            width = 2;   // breder
+            height = 0.8; // hoger
         }
+
+        choiceEl.setAttribute('position', `${x} ${y} 0`);
+
+        const plane = document.createElement('a-plane');
+        plane.setAttribute('class', 'clickable');
+        plane.setAttribute('width', width);
+        plane.setAttribute('height', height);
+        plane.setAttribute('color', '#004488');
+        plane.setAttribute('animation__hover', 'property: color; to: #0077FF; startEvents: mouseenter; dur: 200');
+        plane.setAttribute('animation__leave', 'property: color; to: #004488; startEvents: mouseleave; dur: 200`);
+
+        const text = document.createElement('a-text');
+        text.setAttribute('value', choice.text);
+        text.setAttribute('align', 'center');
+        text.setAttribute('position', '0 0 0.01');
+        text.setAttribute('color', '#FFF');
+        text.setAttribute('width', '3');
+
+        choiceEl.appendChild(plane);
+        choiceEl.appendChild(text);
+
+        plane.addEventListener('click', () => {
+            if (choice.action) choice.action();
+            goToScene(choice.next);
+        });
+
+        container.appendChild(choiceEl);
+    });
+}
+
 
         function goToScene(sceneId) {
             gameState.currentScene = sceneId;
