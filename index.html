@@ -79,8 +79,8 @@
         <a-entity id="ui-container" position="0 1.5 -3">
             
             <a-text id="question-text" value="Laden..." align="center"
-                    position="0 1.8 0" width="4.5" wrap-count="45"
-                    color="#f5f7fa"></a-text>
+        position="0 2.4 0" width="4.5" wrap-count="45"
+        color="#f5f7fa"></a-text>
 
             <a-image id="image-display"
                      position="0 0.4 0"
@@ -94,7 +94,7 @@
                      height="2.5"
                      visible="false"></a-video>
 
-            <a-entity id="choices-container" position="0 -0.8 0"></a-entity>
+            <a-entity id="choices-container" position="0 -1.8 0"></a-entity>
         </a-entity>
 
     </a-scene>
@@ -131,7 +131,7 @@
                 mediaType: 'video', media: '#actie-video', choices: [], onVideoEnd: 'vraag1'
             },
             'vraag1': {
-                type: 'vraag', text: 'Vraag 1: Elke kas is hetzelfde, engineers kopiëren en plakken.\nWat denk jij?',
+                type: 'vraag', text: 'Vraag 1: Elke kas is hetzelfde, engineers kopieren en plakken.\nWat denk jij?',
                 mediaType: 'image', media: '#vraag-foto',
                 choices: [
                     { text: 'Nee, elke teelt, locatie en klant hebben andere eisen', next: 'video2', action: actieCorrect },
@@ -464,7 +464,6 @@
                 normalBtn.classList.add('active');
                 vrBtn.classList.remove('active');
             });
-
             vrBtn.addEventListener('click', function () {
                 normalBtn.classList.remove('active');
                 vrBtn.classList.add('active');
