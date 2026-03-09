@@ -322,12 +322,15 @@
                     width = 2.4;
                     height = 0.8;
                 } else if (isVraag) {
-                    // Verticale lijst, zorgt dat lange tekst er makkelijk in past
-                    x = 0;
-                    y = 0.5 - (index * 0.65);
-                    width = 4.2;  // Flink breed voor hele zinnen
-                    height = 0.5;
-                } else {
+    // Verticale lijst iets lager, zodat de bovenste knop niet in de video valt
+    x = 0;
+    const startY = 0.0;      // was 0.5, nu lager
+    const rowSpacing = 0.65;
+    y = startY - (index * rowSpacing);
+    width = 4.2;
+    height = 0.5;
+} else {
+
                     // Fallback (bijv. 2 knoppen horizontaal)
                     const spacing = 1.8;
                     const startX = -(total - 1) * spacing / 2;
@@ -337,7 +340,7 @@
                     height = 0.5;
                 }
 
-                choiceEl.setAttribute('position', `${x} ${y} 0.1`);
+                choiceEl.setAttribute('position', `${x} ${y} 0.02`);
 
 
                 const plane = document.createElement('a-plane');
