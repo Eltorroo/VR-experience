@@ -64,6 +64,13 @@
 <!-- Tweede video -->
 <video id="tweede-video" src="tweede.mp4" playsinline webkit-playsinline crossorigin="anonymous"></video>
 
+<!-- Derde video -->
+<video id="derde-video" src="derde.mp4" playsinline webkit-playsinline crossorigin="anonymous"></video>
+
+<!-- Vierde video -->
+<video id="vierde-video" src="vierde.mp4" playsinline webkit-playsinline crossorigin="anonymous"></video>
+
+
 </a-assets>
 
 
@@ -158,39 +165,57 @@
                 choices: [],
                 onVideoEnd: 'scene2'
             },
-            'scene2': {
+                        'scene2': {
                 type: 'keuze2',
-                text: 'Keuze 2: De kasbouw loopt vertraging op.\nHoe los je dit op?',
+                text: 'Keuze 2: De kasbouw loopt vertraging op.\\nHoe los je dit op?',
                 mediaType: 'image',
                 media: '#vraag-foto',
                 choices: [
-                    { text: 'Extra team inzetten', next: 'scene3', action: () => {} },
-                    { text: 'Stagiair alleen laten', next: 'scene3', action: () => {
+                    { text: 'Extra team inzetten', next: 'scene2_video', action: () => {} },
+                    { text: 'Stagiair alleen laten', next: 'scene2_video', action: () => {
                         gameState.softMistakes++;
                         if (gameState.softMistakes >= 2) gameState.hardFail = true;
                     }},
-                    { text: 'Planning aanpassen', next: 'scene3', action: () => {} }
+                    { text: 'Planning aanpassen', next: 'scene2_video', action: () => {} }
                 ]
             },
-            'scene3': {
-                type: 'keuze3',
-                text: 'Keuze 3: Testfase installaties. Er klinkt een alarm!',
-                mediaType: 'image',
-                media: '#vraag-foto',
-                choices: () => {
-                    if (gameState.hardFail) {
-                        return [
-                            { text: 'Noodstop! (Herstel)', next: 'scene4', action: () => { gameState.hardFail = false; } },
-                            { text: 'Doordraaien (Fail)', next: 'fail_route', action: () => {} }
-                        ];
-                    } else {
-                        return [
-                            { text: 'Direct repareren', next: 'scene4', action: () => {} },
-                            { text: 'Melden aan de chef', next: 'scene4', action: () => {} }
-                        ];
-                    }
-                }
+            'scene2_video': {
+                type: 'video',
+                text: 'Kijk naar het derde fragment...',
+                mediaType: 'video',
+                media: '#derde-video',
+                choices: [],
+                onVideoEnd: 'scene3'
             },
+
+           'scene3': {
+    type: 'keuze3',
+    text: 'Keuze 3: Testfase installaties. Er klinkt een alarm!',
+    mediaType: 'image',
+    media: '#vraag-foto',
+    choices: () => {
+        if (gameState.hardFail) {
+            return [
+                { text: 'Noodstop! (Herstel)', next: 'scene3_video', action: () => { gameState.hardFail = false; } },
+                { text: 'Doordraaien (Fail)', next: 'fail_route', action: () => {} }
+            ];
+        } else {
+            return [
+                { text: 'Direct repareren', next: 'scene3_video', action: () => {} },
+                { text: 'Melden aan de chef', next: 'scene3_video', action: () => {} }
+            ];
+        }
+    }
+},
+            'scene3_video': {
+                type: 'video',
+                text: 'Kijk naar het vierde fragment...',
+                mediaType: 'video',
+                media: '#vierde-video',
+                choices: [],
+                onVideoEnd: 'scene4'
+            },
+
             'scene4': {
                 type: 'keuze4',
                 text: 'Keuze 4: Optimalisatie van het klimaat.\nWelke instelling kies je?',
