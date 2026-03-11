@@ -10,12 +10,12 @@
             margin: 0;
             font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
                          Roboto, "Helvetica Neue", Arial, sans-serif;
-            background: #0b1723; /* donkerblauw-groenige achtergrond */
+            background: #0b1723;
             color: #ffffff;
         }
 
         #mode-selector button {
-            background-color: #0b7c58;   /* primaire groen (Cogas-achtig) */
+            background-color: #0b7c58;
             color: #ffffff;
             border: none;
             padding: 8px 14px;
@@ -26,27 +26,370 @@
         }
 
         #mode-selector button.active {
-            background-color: #095b42;   /* iets donkerder als actief */
+            background-color: #095b42;
         }
 
         #mode-selector button:hover {
-            background-color: #12a06f;   /* iets lichter bij hover */
-        }
-
-        /* Maurice accentkleur voor speciale knoppen */
-        .maurice-accent {
-            background-color: #f5a623;  /* warme Maurice-achtige oranje/geel */
-            color: #ffffff;
+            background-color: #12a06f;
         }
     </style>
+
+    <script>
+        // --- A-FRAME COMPONENT: KAS EXPERIENCE ---
+        // Dit vervangt de losse procedurele code en zorgt voor betere prestaties
+        AFRAME.registerComponent('kas-experience', {
+            init: function () {
+                // Game State
+                this.gameState = {
+                    currentScene: 'scene0',
+                    softMistakes: 0,
+                    hardFail: false
+                };
+
+                // Acties voor de keuzes
+                const actieCorrect = () => {};
+                const actieSoftFail = () => { this.gameState.softMistakes++; };
+                const actieHardFail = () => { this.gameState.hardFail = true; };
+
+                // Scenes Configuratie
+                this.scenesConfig = {
+                    'scene0': {
+                        type: 'intro',
+                        text: 'Welkom bij de kastechniek-experience.\nKijk 1.5 seconde naar START om te beginnen.',
+                        mediaType: 'image', media: '#intro-bg',
+                        choices: [{ text: 'START', next: 'video1' }]
+                    },
+
+                    // --- DEEL 1 ---
+                    'video1': {
+                        type: 'video', text: 'Elk project begint met een zorgvuldige planning door onze engineers...',
+                        mediaType: 'video', media: '#actie-video', choices: [], onVideoEnd: 'vraag1'
+                    },
+                    'vraag1': {
+                        type: 'vraag', text: 'Vraag 1: Elke kas is hetzelfde, engineers kopieren en plakken.\nWat denk jij?',
+                        mediaType: 'image', media: '#vraag-foto',
+                        choices: [
+                            { text: 'Nee, elke teelt, locatie en klant hebben andere eisen', next: 'video2', action: actieCorrect },
+                            { text: 'Ja, een kas is gewoon staal, aluminium en glas', next: 'video2', action: actieSoftFail },
+                            { text: 'Ja, alleen de planten die erin staan verschillen', next: 'video2', action: actieHardFail }
+                        ]
+                    },
+
+                    // --- DEEL 2 ---
+                    'video2': {
+                        type: 'video', text: 'Onze verkoper maakt afspraken met de klant, elke tuinder heeft eigen wensen.',
+                        mediaType: 'video', media: '#tweede-video', choices: [], onVideoEnd: 'vraag2'
+                    },
+                    'vraag2': {
+                        type: 'vraag', text: 'Vraag 2: De klant heeft duidelijke verwachtingen en eisen.\nWat gebeurt er met deze info?',
+                        mediaType: 'image', media: '#vraag-foto',
+                        choices: [
+                            { text: 'Dit gaat naar onze fabriek, waar alles op maat gemaakt wordt', next: 'video3', action: actieCorrect },
+                            { text: 'Dit sturen we door naar een extern bedrijf dat alles voor ons maakt', next: 'video3', action: actieSoftFail },
+                            { text: 'Dit gaat het ene oor in en andere oor eruit', next: 'video3', action: actieHardFail }
+                        ]
+                    },
+
+                    // --- DEEL 3 ---
+                    'video3': {
+                        type: 'video', text: 'De info wordt door engineers omgezet naar tekeningen voor de fabriek.',
+                        mediaType: 'video', media: '#derde-video', choices: [], onVideoEnd: 'vraag3'
+                    },
+                    'vraag3': {
+                        type: 'vraag', text: 'Vraag 3: Je staat in de fabriek en denkt dat een engineer een tekenfout heeft gemaakt.\nWat doe je?',
+                        mediaType: 'image', media: '#vraag-foto',
+                        choices: [
+                            { text: 'Ik meld dit netjes bij de engineer of chef om het aan te passen', next: 'video4', action: actieCorrect },
+                            { text: 'Ik probeer het direct zelf op te lossen zonder overleg', next: 'video4', action: actieSoftFail },
+                            { text: 'De engineers maken geen fouten, ik negeer het en zeg niks', next: 'video4', action: actieHardFail }
+                        ]
+                    },
+
+                    // --- DEEL 4 ---
+                    'video4': {
+                        type: 'video', text: 'Kijk mee naar de opbouw...',
+                        mediaType: 'video', media: '#vierde-video', choices: [], onVideoEnd: 'vraag4'
+                    },
+                    'vraag4': {
+                        type: 'vraag', text: 'Vraag 4: Optimalisatie van het klimaat.\nWelke instelling kies je in de software?',
+                        mediaType: 'image', media: '#vraag-foto',
+                        choices: [
+                            { text: 'Duurzaam met een focus op energiebesparing (DAC focus)', next: 'video5', action: actieCorrect },
+                            { text: 'Maximale productie zonder te kijken naar het energieverbruik', next: 'video5', action: actieSoftFail },
+                            { text: 'Ik zet handmatig alles op 100% voor het snelste resultaat', next: 'video5', action: actieHardFail }
+                        ]
+                    },
+
+                    // --- DEEL 5 ---
+                    'video5': {
+                        type: 'video', text: 'De bouw nadert zijn einde...',
+                        mediaType: 'video', media: '#vijfde-video', choices: [], onVideoEnd: 'vraag5'
+                    },
+                    'vraag5': {
+                        type: 'vraag', text: 'Vraag 5: Laatste controle voor oplevering.\nCheck je alles nog een keer?',
+                        mediaType: 'image', media: '#vraag-foto',
+                        choices: [
+                            { text: 'Ja, ik voer een uitgebreide visuele en technische check uit', next: 'video6', action: actieCorrect },
+                            { text: 'Ik doe alleen een snelle visuele ronde, het zal wel goed zijn', next: 'video6', action: actieSoftFail },
+                            { text: 'Nee, ik lever het direct op om tijd te besparen', next: 'video6', action: actieHardFail }
+                        ]
+                    },
+
+                    // --- DEEL 6 ---
+                    'video6': {
+                        type: 'video', text: 'Tijdens de inbedrijfstelling...',
+                        mediaType: 'video', media: '#zesde-video', choices: [], onVideoEnd: 'vraag6'
+                    },
+                    'vraag6': {
+                        type: 'vraag', text: 'Vraag 6: Tijdens het testen hoor je een vreemd tikkend geluid bij de motoren.\nWat doe je?',
+                        mediaType: 'image', media: '#vraag-foto',
+                        choices: [
+                            { text: 'Systeem veilig uitschakelen en de aandrijving fysiek controleren', next: 'video7', action: actieCorrect },
+                            { text: 'Even aankijken of het geluid vanzelf weer verdwijnt', next: 'video7', action: actieSoftFail },
+                            { text: 'De muziek harder zetten, een nieuwe motor moet even inslijten', next: 'video7', action: actieHardFail }
+                        ]
+                    },
+
+                    // --- DEEL 7 ---
+                    'video7': {
+                        type: 'video', text: 'De klimaatbeheersing wordt geactiveerd...',
+                        mediaType: 'video', media: '#zevende-video', choices: [], onVideoEnd: 'vraag7'
+                    },
+                    'vraag7': {
+                        type: 'vraag', text: 'Vraag 7: De computer geeft een plotselinge temperatuuralarm.\nWat is je eerste actie?',
+                        mediaType: 'image', media: '#vraag-foto',
+                        choices: [
+                            { text: 'Op afstand de sensorwaarden uitlezen en een diagnose stellen', next: 'video8', action: actieCorrect },
+                            { text: 'Direct een monteur in de auto zetten zonder voorkennis', next: 'video8', action: actieSoftFail },
+                            { text: 'Het alarm resetten, systemen hebben vaak valse meldingen', next: 'video8', action: actieHardFail }
+                        ]
+                    },
+
+                    // --- DEEL 8 ---
+                    'video8': {
+                        type: 'video', text: 'Innovatie en duurzaamheid in de kas...',
+                        mediaType: 'video', media: '#achtste-video', choices: [], onVideoEnd: 'vraag8'
+                    },
+                    'vraag8': {
+                        type: 'vraag', text: 'Vraag 8: De tuinder twijfelt of hij LED-belichting moet toepassen.\nWat adviseer je?',
+                        mediaType: 'image', media: '#vraag-foto',
+                        choices: [
+                            { text: 'Ik bereken de ROI en laat de voordelen voor de plantengroei zien', next: 'video9', action: actieCorrect },
+                            { text: 'Ik zeg dat hij het gewoon moet doen, LED is altijd beter', next: 'video9', action: actieSoftFail },
+                            { text: 'Ik raad het af, oude lampen werken toch ook nog prima?', next: 'video9', action: actieHardFail }
+                        ]
+                    },
+
+                    // --- DEEL 9 ---
+                    'video9': {
+                        type: 'video', text: 'Onderhoud is cruciaal voor een lange levensduur...',
+                        mediaType: 'video', media: '#negende-video', choices: [], onVideoEnd: 'vraag9'
+                    },
+                    'vraag9': {
+                        type: 'vraag', text: 'Vraag 9: Hoe richten we het toekomstige onderhoud voor deze kas in?',
+                        mediaType: 'image', media: '#vraag-foto',
+                        choices: [
+                            { text: 'Met een vast preventief onderhoudsschema volgens de handleiding', next: 'video10', action: actieCorrect },
+                            { text: 'We plannen af en toe wat in als we toevallig in de buurt zijn', next: 'video10', action: actieSoftFail },
+                            { text: 'Pas ingrijpen wanneer de tuinder belt dat alles stilstaat', next: 'video10', action: actieHardFail }
+                        ]
+                    },
+
+                    // --- DEEL 10 ---
+                    'video10': {
+                        type: 'video', text: 'Het project is succesvol doorlopen.',
+                        mediaType: 'video', media: '#tiende-video', choices: [], onVideoEnd: 'vraag10'
+                    },
+                    'vraag10': {
+                        type: 'vraag', text: 'Vraag 10: Tijd voor de formele overdracht.\nHoe sluit je het af met de tuinder?',
+                        mediaType: 'image', media: '#vraag-foto',
+                        choices: [
+                            { text: 'Een eindevaluatie doen en alle documentatie netjes overdragen', next: 'einde', action: actieCorrect },
+                            { text: 'Sleutels inleveren, een handje schudden en snel door naar huis', next: 'einde', action: actieSoftFail },
+                            { text: 'Direct de eindfactuur sturen en verder niets meer van je laten horen', next: 'einde', action: actieHardFail }
+                        ]
+                    },
+
+                    // --- EINDE ---
+                    'einde': {
+                        type: 'einde',
+                        text: () => {
+                            if (this.gameState.hardFail) return 'Resultaat: Slecht.\nEr is een kritieke fout gemaakt (Hard Fail). De kas functioneert niet veilig.';
+                            if (this.gameState.softMistakes >= 3) return 'Resultaat: Matig.\nDe kas draait, maar met veel haken en ogen door slordige keuzes.';
+                            if (this.gameState.softMistakes > 0) return 'Resultaat: Prima.\nJe hebt de kas draaiend gekregen, op een paar kleine verbeterpuntjes na.';
+                            return 'Resultaat: Uitstekend!\nEen perfecte, foutloze en duurzame installatie afgeleverd.';
+                        },
+                        mediaType: 'image', media: '#intro-bg',
+                        choices: [
+                            { text: 'OPNIEUW SPELEN', next: 'scene0', action: () => { this.gameState.softMistakes = 0; this.gameState.hardFail = false; } }
+                        ]
+                    }
+                };
+
+                // DOM Referenties ophalen
+                this.elText = document.getElementById('question-text');
+                this.elImage = document.getElementById('image-display');
+                this.elVideo = document.getElementById('video-display');
+                this.btnEntities = [
+                    document.getElementById('btn-0'),
+                    document.getElementById('btn-1'),
+                    document.getElementById('btn-2')
+                ];
+                this.btnPlanes = [
+                    document.getElementById('btn-plane-0'),
+                    document.getElementById('btn-plane-1'),
+                    document.getElementById('btn-plane-2')
+                ];
+                this.btnTexts = [
+                    document.getElementById('btn-text-0'),
+                    document.getElementById('btn-text-1'),
+                    document.getElementById('btn-text-2')
+                ];
+
+                // Koppel klik events aan de herbruikbare knoppen
+                this.btnPlanes.forEach((plane, index) => {
+                    plane.addEventListener('click', () => {
+                        this.handleChoice(index);
+                    });
+                });
+
+                // Gebruikers-interactie fix voor video's (iOS/Mobile)
+                document.body.addEventListener('click', () => {
+                    document.querySelectorAll('video').forEach(v => {
+                        if (v.paused) {
+                            v.muted = true;
+                            v.play().then(() => v.pause()).catch(() => {});
+                        }
+                    });
+                }, { once: true });
+
+                // Start het spel
+                this.goToScene('scene0');
+            },
+
+            handleChoice: function(index) {
+                const sceneData = this.scenesConfig[this.gameState.currentScene];
+                const choicesArray = typeof sceneData.choices === 'function' ? sceneData.choices() : (sceneData.choices || []);
+                const choice = choicesArray[index];
+
+                if (!choice) return;
+
+                // Visuele feedback: laat de knop even oplichten voordat we doorgaan
+                const plane = this.btnPlanes[index];
+                plane.setAttribute('color', '#12a06f'); 
+
+                // Voer de actie uit
+                if (choice.action) choice.action();
+
+                // Kleine vertraging voor de UX, daarna door naar volgende scene
+                setTimeout(() => {
+                    this.goToScene(choice.next);
+                }, 400);
+            },
+
+            goToScene: function (sceneId) {
+                this.gameState.currentScene = sceneId;
+                const sceneData = this.scenesConfig[sceneId];
+
+                // Update Tekst
+                const textValue = typeof sceneData.text === 'function' ? sceneData.text() : sceneData.text;
+                this.elText.setAttribute('value', textValue);
+
+                // Pauzeer alle video's
+                document.querySelectorAll('video').forEach(vid => {
+                    vid.pause();
+                    vid.currentTime = 0;
+                    vid.onended = null;
+                });
+
+                // Media Wisselen
+                if (sceneData.mediaType === 'video') {
+                    this.elImage.setAttribute('visible', 'false');
+                    this.elVideo.setAttribute('visible', 'true');
+                    this.elVideo.setAttribute('src', sceneData.media);
+
+                    setTimeout(() => {
+                        const videoAsset = document.querySelector(sceneData.media);
+                        if (videoAsset) {
+                            const p = videoAsset.play();
+                            if (p !== undefined) {
+                                p.catch(err => console.log('Video play error:', err));
+                            }
+                            videoAsset.onended = () => {
+                                if (sceneData.onVideoEnd) this.goToScene(sceneData.onVideoEnd);
+                            };
+                        }
+                    }, 100);
+                } else {
+                    this.elVideo.setAttribute('visible', 'false');
+                    if (sceneData.media) {
+                        this.elImage.setAttribute('visible', 'true');
+                        this.elImage.setAttribute('src', sceneData.media);
+                    } else {
+                        this.elImage.setAttribute('visible', 'false');
+                    }
+                }
+
+                // Render Knoppen (Hergebruik DOM elementen ipv opnieuw aanmaken)
+                const choicesArray = typeof sceneData.choices === 'function' ? sceneData.choices() : (sceneData.choices || []);
+                const isVraag = choicesArray.length === 3;
+
+                // Loop door onze 3 gereserveerde knoppen
+                this.btnEntities.forEach((btnEntity, index) => {
+                    const plane = this.btnPlanes[index];
+                    const textEl = this.btnTexts[index];
+
+                    if (index < choicesArray.length) {
+                        const choice = choicesArray[index];
+                        
+                        // Layout bepalen
+                        let y = 0, width = 1.5, height = 0.5;
+                        if (this.gameState.currentScene === 'scene0' || this.gameState.currentScene === 'einde') {
+                            y = -0.5; width = 2.4; height = 0.8;
+                        } else if (isVraag) {
+                            const startY = 0.0;
+                            const rowSpacing = 0.65;
+                            y = startY - (index * rowSpacing);
+                            width = 4.2; height = 0.5;
+                        }
+
+                        // Update Positie & Zichtbaarheid
+                        btnEntity.setAttribute('position', `0 ${y} 0.02`);
+                        btnEntity.setAttribute('visible', 'true');
+                        
+                        // Update styling
+                        let baseColor = (this.gameState.currentScene === 'einde') ? '#f5a623' : '#0b7c58';
+                        let hoverColor = (this.gameState.currentScene === 'einde') ? '#f8bf4a' : '#12a06f';
+
+                        plane.setAttribute('width', width);
+                        plane.setAttribute('height', height);
+                        plane.setAttribute('color', baseColor);
+                        plane.setAttribute('animation__hover', `property: color; to: ${hoverColor}; startEvents: mouseenter; dur: 200`);
+                        plane.setAttribute('animation__leave', `property: color; to: ${baseColor}; startEvents: mouseleave; dur: 200`);
+                        plane.classList.add('clickable'); // Maak klikbaar voor raycaster
+
+                        // Update Tekst
+                        textEl.setAttribute('value', choice.text);
+                        textEl.setAttribute('width', width * 0.9);
+                        textEl.setAttribute('wrap-count', isVraag ? '45' : '20');
+
+                    } else {
+                        // Verberg knoppen die niet nodig zijn in deze scene
+                        btnEntity.setAttribute('visible', 'false');
+                        plane.classList.remove('clickable'); // Negeer raycaster om bugs te voorkomen
+                    }
+                });
+            }
+        });
+    </script>
 </head>
 <body>
-     <div id="mode-selector" style="position: fixed; top: 10px; left: 10px; z-index: 9999;">
+    <div id="mode-selector" style="position: fixed; top: 10px; left: 10px; z-index: 9999;">
         <button id="normalModeBtn">Normaal scherm</button>
         <button id="vrModeBtn">VR bril</button>
     </div>
     
-    <a-scene background="color: #222" device-orientation-permission-ui="enabled: true">
+    <a-scene kas-experience background="color: #222" device-orientation-permission-ui="enabled: true">
 
         <a-assets>
             <img id="intro-bg" src="startpagina.png" crossorigin="anonymous">
@@ -65,7 +408,7 @@
         </a-assets>
 
         <a-entity camera look-controls position="0 1.6 0">
-            <a-entity cursor="fuse: true; fuseTimeout: 2000"
+            <a-entity cursor="fuse: true; fuseTimeout: 1500"
                       raycaster="objects: .clickable"
                       position="0 0 -1"
                       geometry="primitive: ring; radiusInner: 0.02; radiusOuter: 0.03"
@@ -79,398 +422,72 @@
         <a-entity id="ui-container" position="0 1.5 -3">
             
             <a-text id="question-text" value="Laden..." align="center"
-        position="0 2.0 0" width="4.5" wrap-count="45"
-        color="#f5f7fa"></a-text>
+                    position="0 2.0 0" width="4.5" wrap-count="45"
+                    color="#f5f7fa"></a-text>
 
-            <a-image id="image-display"
-                     position="0 0.4 0"
-                     width="6.66"
-                     height="2"
-                     visible="false"></a-image>
+            <a-image id="image-display" position="0 0.4 0" width="6.66" height="2" visible="false"></a-image>
 
-            <a-video id="video-display"
-                     position="0 0.4 0"
-                     width="5"
-                     height="2.5"
-                     visible="false"></a-video>
+            <a-video id="video-display" position="0 0.4 0" width="5" height="2.5" visible="false"></a-video>
 
-            <a-entity id="choices-container" position="0 -1.0 0"></a-entity>
+            <a-entity id="choices-container" position="0 -1.0 0">
+                
+                <a-entity id="btn-0" visible="false">
+                    <a-plane id="btn-plane-0" position="0 0 0" material="shader: flat;"></a-plane>
+                    <a-text id="btn-text-0" position="0 0 0.01" align="center" color="#FFF"></a-text>
+                </a-entity>
+
+                <a-entity id="btn-1" visible="false">
+                    <a-plane id="btn-plane-1" position="0 0 0" material="shader: flat;"></a-plane>
+                    <a-text id="btn-text-1" position="0 0 0.01" align="center" color="#FFF"></a-text>
+                </a-entity>
+
+                <a-entity id="btn-2" visible="false">
+                    <a-plane id="btn-plane-2" position="0 0 0" material="shader: flat;"></a-plane>
+                    <a-text id="btn-text-2" position="0 0 0.01" align="center" color="#FFF"></a-text>
+                </a-entity>
+
+            </a-entity>
         </a-entity>
 
     </a-scene>
 
     <script>
-        // --- GAME ENGINE & STATE ---
-        const gameState = {
-            currentScene: 'scene0',
-            softMistakes: 0,
-            hardFail: false,
-            flags: []
-        };
-
-        // Acties voor de 3 keuzes
-        const actieCorrect = () => {};
-        const actieSoftFail = () => { gameState.softMistakes++; };
-        const actieHardFail = () => { gameState.hardFail = true; };
-
-        // --- SCENES CONFIGURATIE ---
-        const scenesConfig = {
-            'scene0': {
-                type: 'intro',
-                text: 'Welkom bij de kastechniek-experience.\nKijk 2 seconde naar START om te beginnen.',
-                mediaType: 'image',
-                media: '#intro-bg',
-                choices: [
-                    { text: 'START', next: 'video1' }
-                ]
-            },
-
-            // --- DEEL 1 ---
-            'video1': {
-                type: 'video', text: 'Elk project begint met een zorgvuldige planning door onze engineers...',
-                mediaType: 'video', media: '#actie-video', choices: [], onVideoEnd: 'vraag1'
-            },
-            'vraag1': {
-                type: 'vraag', text: 'Vraag 1: Elke kas is hetzelfde, engineers kopieren en plakken.\nWat denk jij?',
-                mediaType: 'image', media: '#vraag-foto',
-                choices: [
-                    { text: 'Nee, elke teelt, locatie en klant hebben andere eisen', next: 'video2', action: actieCorrect },
-                    { text: 'Ja, een kas is gewoon staal, aluminium en glas', next: 'video2', action: actieSoftFail },
-                    { text: 'Ja, alleen de planten die erin staan verschillen', next: 'video2', action: actieHardFail }
-                ]
-            },
-
-            // --- DEEL 2 ---
-            'video2': {
-                type: 'video', text: 'Onze verkoper maakt afspraken met de klant, elke tuinder heeft eigen wensen.',
-                mediaType: 'video', media: '#tweede-video', choices: [], onVideoEnd: 'vraag2'
-            },
-            'vraag2': {
-                type: 'vraag', text: 'Vraag 2: De klant heeft duidelijke verwachtingen en eisen.\nWat gebeurt er met deze info?',
-                mediaType: 'image', media: '#vraag-foto',
-                choices: [
-                    { text: 'Dit gaat naar onze fabriek, waar alles op maat gemaakt wordt', next: 'video3', action: actieCorrect },
-                    { text: 'Dit sturen we door naar een extern bedrijf dat alles voor ons maakt', next: 'video3', action: actieSoftFail },
-                    { text: 'Dit gaat het ene oor in en andere oor eruit', next: 'video3', action: actieHardFail }
-                ]
-            },
-
-            // --- DEEL 3 ---
-            'video3': {
-                type: 'video', text: 'De info wordt door engineers omgezet naar tekeningen voor de fabriek.',
-                mediaType: 'video', media: '#derde-video', choices: [], onVideoEnd: 'vraag3'
-            },
-            'vraag3': {
-                type: 'vraag', text: 'Vraag 3: Je staat in de fabriek en denkt dat een engineer een tekenfout heeft gemaakt.\nWat doe je?',
-                mediaType: 'image', media: '#vraag-foto',
-                choices: [
-                    { text: 'Ik meld dit netjes bij de engineer of chef om het aan te passen', next: 'video4', action: actieCorrect },
-                    { text: 'Ik probeer het direct zelf op te lossen zonder overleg', next: 'video4', action: actieSoftFail },
-                    { text: 'De engineers maken geen fouten, ik negeer het en zeg niks', next: 'video4', action: actieHardFail }
-                ]
-            },
-
-            // --- DEEL 4 ---
-            'video4': {
-                type: 'video', text: 'Kijk mee naar de opbouw...',
-                mediaType: 'video', media: '#vierde-video', choices: [], onVideoEnd: 'vraag4'
-            },
-            'vraag4': {
-                type: 'vraag', text: 'Vraag 4: Optimalisatie van het klimaat.\nWelke instelling kies je in de software?',
-                mediaType: 'image', media: '#vraag-foto',
-                choices: [
-                    { text: 'Duurzaam met een focus op energiebesparing (DAC focus)', next: 'video5', action: actieCorrect },
-                    { text: 'Maximale productie zonder te kijken naar het energieverbruik', next: 'video5', action: actieSoftFail },
-                    { text: 'Ik zet handmatig alles op 100% voor het snelste resultaat', next: 'video5', action: actieHardFail }
-                ]
-            },
-
-            // --- DEEL 5 ---
-            'video5': {
-                type: 'video', text: 'De bouw nadert zijn einde...',
-                mediaType: 'video', media: '#vijfde-video', choices: [], onVideoEnd: 'vraag5'
-            },
-            'vraag5': {
-                type: 'vraag', text: 'Vraag 5: Laatste controle voor oplevering.\nCheck je alles nog een keer?',
-                mediaType: 'image', media: '#vraag-foto',
-                choices: [
-                    { text: 'Ja, ik voer een uitgebreide visuele en technische check uit', next: 'video6', action: actieCorrect },
-                    { text: 'Ik doe alleen een snelle visuele ronde, het zal wel goed zijn', next: 'video6', action: actieSoftFail },
-                    { text: 'Nee, ik lever het direct op om tijd te besparen', next: 'video6', action: actieHardFail }
-                ]
-            },
-
-            // --- DEEL 6 (CONCEPT) ---
-            'video6': {
-                type: 'video', text: 'Tijdens de inbedrijfstelling...',
-                mediaType: 'video', media: '#zesde-video', choices: [], onVideoEnd: 'vraag6'
-            },
-            'vraag6': {
-                type: 'vraag', text: 'Vraag 6: Tijdens het testen hoor je een vreemd tikkend geluid bij de motoren.\nWat doe je?',
-                mediaType: 'image', media: '#vraag-foto',
-                choices: [
-                    { text: 'Systeem veilig uitschakelen en de aandrijving fysiek controleren', next: 'video7', action: actieCorrect },
-                    { text: 'Even aankijken of het geluid vanzelf weer verdwijnt', next: 'video7', action: actieSoftFail },
-                    { text: 'De muziek harder zetten, een nieuwe motor moet even inslijten', next: 'video7', action: actieHardFail }
-                ]
-            },
-
-            // --- DEEL 7 (CONCEPT) ---
-            'video7': {
-                type: 'video', text: 'De klimaatbeheersing wordt geactiveerd...',
-                mediaType: 'video', media: '#zevende-video', choices: [], onVideoEnd: 'vraag7'
-            },
-            'vraag7': {
-                type: 'vraag', text: 'Vraag 7: De computer geeft een plotselinge temperatuuralarm.\nWat is je eerste actie?',
-                mediaType: 'image', media: '#vraag-foto',
-                choices: [
-                    { text: 'Op afstand de sensorwaarden uitlezen en een diagnose stellen', next: 'video8', action: actieCorrect },
-                    { text: 'Direct een monteur in de auto zetten zonder voorkennis', next: 'video8', action: actieSoftFail },
-                    { text: 'Het alarm resetten, systemen hebben vaak valse meldingen', next: 'video8', action: actieHardFail }
-                ]
-            },
-
-            // --- DEEL 8 (CONCEPT) ---
-            'video8': {
-                type: 'video', text: 'Innovatie en duurzaamheid in de kas...',
-                mediaType: 'video', media: '#achtste-video', choices: [], onVideoEnd: 'vraag8'
-            },
-            'vraag8': {
-                type: 'vraag', text: 'Vraag 8: De tuinder twijfelt of hij LED-belichting moet toepassen.\nWat adviseer je?',
-                mediaType: 'image', media: '#vraag-foto',
-                choices: [
-                    { text: 'Ik bereken de ROI en laat de voordelen voor de plantengroei zien', next: 'video9', action: actieCorrect },
-                    { text: 'Ik zeg dat hij het gewoon moet doen, LED is altijd beter', next: 'video9', action: actieSoftFail },
-                    { text: 'Ik raad het af, oude lampen werken toch ook nog prima?', next: 'video9', action: actieHardFail }
-                ]
-            },
-
-            // --- DEEL 9 (CONCEPT) ---
-            'video9': {
-                type: 'video', text: 'Onderhoud is cruciaal voor een lange levensduur...',
-                mediaType: 'video', media: '#negende-video', choices: [], onVideoEnd: 'vraag9'
-            },
-            'vraag9': {
-                type: 'vraag', text: 'Vraag 9: Hoe richten we het toekomstige onderhoud voor deze kas in?',
-                mediaType: 'image', media: '#vraag-foto',
-                choices: [
-                    { text: 'Met een vast preventief onderhoudsschema volgens de handleiding', next: 'video10', action: actieCorrect },
-                    { text: 'We plannen af en toe wat in als we toevallig in de buurt zijn', next: 'video10', action: actieSoftFail },
-                    { text: 'Pas ingrijpen wanneer de tuinder belt dat alles stilstaat', next: 'video10', action: actieHardFail }
-                ]
-            },
-
-            // --- DEEL 10 (CONCEPT) ---
-            'video10': {
-                type: 'video', text: 'Het project is succesvol doorlopen.',
-                mediaType: 'video', media: '#tiende-video', choices: [], onVideoEnd: 'vraag10'
-            },
-            'vraag10': {
-                type: 'vraag', text: 'Vraag 10: Tijd voor de formele overdracht.\nHoe sluit je het af met de tuinder?',
-                mediaType: 'image', media: '#vraag-foto',
-                choices: [
-                    { text: 'Een eindevaluatie doen en alle documentatie netjes overdragen', next: 'einde', action: actieCorrect },
-                    { text: 'Sleutels inleveren, een handje schudden en snel door naar huis', next: 'einde', action: actieSoftFail },
-                    { text: 'Direct de eindfactuur sturen en verder niets meer van je laten horen', next: 'einde', action: actieHardFail }
-                ]
-            },
-
-            // --- EINDE ---
-            'einde': {
-                type: 'einde',
-                text: () => {
-                    if (gameState.hardFail) {
-                        return 'Resultaat: Slecht.\nEr is een kritieke fout gemaakt (Hard Fail). De kas functioneert niet veilig.';
-                    }
-                    if (gameState.softMistakes >= 3) {
-                        return 'Resultaat: Matig.\nDe kas draait, maar met veel haken en ogen door slordige keuzes.';
-                    }
-                    if (gameState.softMistakes > 0) {
-                        return 'Resultaat: Prima.\nJe hebt de kas draaiend gekregen, op een paar kleine verbeterpuntjes na.';
-                    }
-                    return 'Resultaat: Uitstekend!\nEen perfecte, foutloze en duurzame installatie afgeleverd.';
-                },
-                mediaType: 'image',
-                media: '#intro-bg',
-                choices: [
-                    { text: 'OPNIEUW SPELEN', next: 'scene0', action: () => { gameState.softMistakes = 0; gameState.hardFail = false; } }
-                ]
-            }
-        };
-
-        // --- RENDER LOGICA ---
-        function renderChoices(choicesArray) {
-            const container = document.getElementById('choices-container');
-            container.innerHTML = '';
-
-            if (!choicesArray || choicesArray.length === 0) return;
-
-            const total = choicesArray.length;
-            const isVraag = total === 3; // Bij 3 antwoorden bouwen we een verticale lijst voor meer tekst-ruimte
-
-            choicesArray.forEach((choice, index) => {
-                const choiceEl = document.createElement('a-entity');
-
-                let x = 0;
-                let y = 0;
-                let width = 1.5;
-                let height = 0.5;
-
-                // Opmaak logica: Verticaal of grote start knop
-                if (gameState.currentScene === 'scene0' || gameState.currentScene === 'einde') {
-                    y = -0.5;
-                    width = 2.4;
-                    height = 0.8;
-                } else if (isVraag) {
-    // Verticale lijst iets lager, zodat de bovenste knop niet in de video valt
-    x = 0;
-    const startY = 0.0;      // was 0.5, nu lager
-    const rowSpacing = 0.65;
-    y = startY - (index * rowSpacing);
-    width = 4.2;
-    height = 0.5;
-} else {
-
-                    // Fallback (bijv. 2 knoppen horizontaal)
-                    const spacing = 1.8;
-                    const startX = -(total - 1) * spacing / 2;
-                    x = startX + (index * spacing);
-                    y = 0;
-                    width = 1.6;
-                    height = 0.5;
-                }
-
-                choiceEl.setAttribute('position', `${x} ${y} 0.02`);
-
-
-                const plane = document.createElement('a-plane');
-                plane.setAttribute('class', 'clickable');
-                plane.setAttribute('width', width);
-                plane.setAttribute('height', height);
-
-                // Kleuren
-                let baseColor = '#0b7c58';
-                let hoverColor = '#12a06f';
-
-                if (gameState.currentScene === 'einde') {
-                    baseColor = '#f5a623';
-                    hoverColor = '#f8bf4a';
-                }
-
-                plane.setAttribute('color', baseColor);
-                plane.setAttribute('animation__hover', `property: color; to: ${hoverColor}; startEvents: mouseenter; dur: 200`);
-                plane.setAttribute('animation__leave', `property: color; to: ${baseColor}; startEvents: mouseleave; dur: 200`);
-
-                const text = document.createElement('a-text');
-                text.setAttribute('value', choice.text);
-                text.setAttribute('align', 'center');
-                text.setAttribute('position', '0 0 0.01');
-                text.setAttribute('color', '#FFF');
-                
-                // Tekst passend maken op de knop (breedte ietsjes korter dan de plane, en dynamische wrap-count)
-                text.setAttribute('width', width * 0.9);
-                text.setAttribute('wrap-count', isVraag ? '45' : '20');
-
-                choiceEl.appendChild(plane);
-                choiceEl.appendChild(text);
-
-                plane.addEventListener('click', () => {
-                    if (choice.action) choice.action();
-                    goToScene(choice.next);
-                });
-
-                container.appendChild(choiceEl);
-            });
-        }
-
-        function goToScene(sceneId) {
-            gameState.currentScene = sceneId;
-            const sceneData = scenesConfig[sceneId];
-
-            const textValue = typeof sceneData.text === 'function' ? sceneData.text() : sceneData.text;
-            document.getElementById('question-text').setAttribute('value', textValue);
-
-            const imageEl = document.getElementById('image-display');
-            const videoEl = document.getElementById('video-display');
-
-            // Pauzeer alle video's
-            document.querySelectorAll('video').forEach(vid => {
-                vid.pause();
-                vid.currentTime = 0;
-                vid.onended = null;
-            });
-
-            if (sceneData.mediaType === 'video') {
-                imageEl.setAttribute('visible', 'false');
-                videoEl.setAttribute('visible', 'true');
-                videoEl.setAttribute('src', sceneData.media);
-
-                // Korte vertraging (100ms) voordat we play() aanroepen voor WebGL stabiliteit
-                setTimeout(() => {
-                    const videoAsset = document.querySelector(sceneData.media);
-                    if (videoAsset) {
-                        const p = videoAsset.play();
-                        if (p !== undefined) {
-                            p.catch(err => console.log('Video play error:', err));
-                        }
-                        videoAsset.onended = () => {
-                            if (sceneData.onVideoEnd) {
-                                goToScene(sceneData.onVideoEnd);
-                            }
-                        };
-                    }
-                }, 100);
-
-            } else {
-                videoEl.setAttribute('visible', 'false');
-                if (sceneData.media) {
-                    imageEl.setAttribute('visible', 'true');
-                    imageEl.setAttribute('src', sceneData.media);
-                } else {
-                    imageEl.setAttribute('visible', 'false');
-                }
-            }
-
-            const choicesArray = typeof sceneData.choices === 'function' ? sceneData.choices() : (sceneData.choices || []);
-            renderChoices(choicesArray);
-        }
-
-        // INITIALISATIE
-        document.querySelector('a-scene').addEventListener('loaded', function () {
-            goToScene('scene0');
-        });
-
-        // Gebruikers-interactie fix: unlock media
-        document.body.addEventListener('click', function () {
-            document.querySelectorAll('video').forEach(v => {
-                if (v.paused) {
-                    v.muted = true;
-                    v.play().then(() => v.pause()).catch(() => {});
-                }
-            });
-        }, { once: true });
-    </script>
-
-    <script>
+        // Logica voor de HTML overlay knoppen
         document.addEventListener('DOMContentLoaded', function () {
-            const sceneEl = document.querySelector('a-scene');
             const normalBtn = document.getElementById('normalModeBtn');
             const vrBtn = document.getElementById('vrModeBtn');
 
-            if (!normalBtn || !vrBtn || !sceneEl) return;
+            if (!normalBtn || !vrBtn) return;
 
             normalBtn.classList.add('active');
 
             normalBtn.addEventListener('click', function () {
-                if (sceneEl.is && sceneEl.is('vr-mode')) {
+                const sceneEl = document.querySelector('a-scene');
+                if (sceneEl && sceneEl.is && sceneEl.is('vr-mode')) {
                     sceneEl.exitVR();
                 }
                 normalBtn.classList.add('active');
                 vrBtn.classList.remove('active');
             });
+
             vrBtn.addEventListener('click', function () {
+                const sceneEl = document.querySelector('a-scene');
+                if (sceneEl && sceneEl.hasLoaded) {
+                     sceneEl.enterVR();
+                }
                 normalBtn.classList.remove('active');
                 vrBtn.classList.add('active');
+            });
+            
+            // Luister naar A-Frame events om de knoppen te updaten als de gebruiker de VR bril (Cardboard icoon) aanklikt
+            const sceneEl = document.querySelector('a-scene');
+            sceneEl.addEventListener('enter-vr', function () {
+                normalBtn.classList.remove('active');
+                vrBtn.classList.add('active');
+            });
+            sceneEl.addEventListener('exit-vr', function () {
+                normalBtn.classList.add('active');
+                vrBtn.classList.remove('active');
             });
         });
     </script>
