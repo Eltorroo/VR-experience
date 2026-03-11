@@ -14,7 +14,18 @@
             color: #ffffff;
         }
 
-        #mode-selector button {
+        /* UI Overlay Styles */
+        .ui-overlay {
+            position: fixed;
+            z-index: 9999;
+        }
+
+        #mode-selector {
+            top: 10px;
+            left: 10px;
+        }
+
+        .btn-ui {
             background-color: #0b7c58;
             color: #ffffff;
             border: none;
@@ -25,12 +36,33 @@
             cursor: pointer;
         }
 
-        #mode-selector button.active {
+        .btn-ui.active {
             background-color: #095b42;
         }
 
-        #mode-selector button:hover {
+        .btn-ui:hover {
             background-color: #12a06f;
+        }
+
+        #bg-selector {
+            top: 10px;
+            right: 10px;
+            background: #0b1723;
+            padding: 12px;
+            border-radius: 6px;
+            border: 2px solid #0b7c58;
+        }
+
+        .bg-option {
+            cursor: pointer;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .bg-label {
+            margin-bottom: 8px;
+            font-weight: bold;
+            font-size: 14px;
         }
     </style>
 
@@ -335,19 +367,19 @@
     </script>
 </head>
 <body>
-    <div id="mode-selector" style="position: fixed; top: 10px; left: 10px; z-index: 9999;">
-        <button id="normalModeBtn">Normaal scherm</button>
-        <button id="vrModeBtn">VR bril / Passthrough</button>
+    <div id="mode-selector" class="ui-overlay">
+        <button id="normalModeBtn" class="btn-ui">Normaal scherm</button>
+        <button id="vrModeBtn" class="btn-ui">VR bril / Passthrough</button>
     </div>
 
-<div style="position: fixed; top: 10px; right: 10px; z-index: 9999; background: #0b1723; padding: 12px; border-radius: 6px; border: 2px solid #0b7c58;">
-        <div style="margin-bottom: 8px; font-weight: bold; font-size: 14px;">Achtergrond:</div>
-        <label style="cursor: pointer; display: block; margin-bottom: 5px;">
-            <input type="radio" name="bgMode" checked onchange="document.getElementById('bg-sky').setAttribute('visible', 'false')"> 
+    <div id="bg-selector" class="ui-overlay">
+        <div class="bg-label">Achtergrond:</div>
+        <label class="bg-option">
+            <input type="radio" name="bgMode" value="ar" checked> 
             AR (Doorzichtig)
         </label>
-        <label style="cursor: pointer; display: block;">
-            <input type="radio" name="bgMode" onchange="document.getElementById('bg-sky').setAttribute('visible', 'true')"> 
+        <label class="bg-option" style="margin-bottom: 0;">
+            <input type="radio" name="bgMode" value="vr"> 
             VR (Zwarte bioscoop)
         </label>
     </div>
@@ -386,7 +418,8 @@
 
             <a-image id="image-display" position="0 0.5 0" visible="false"></a-image>
 
-            <a-video id="video-display" position="0 0.4 0" width="5" height="2.5" visible="false"></a-video>
+            <!-- Aangepast naar 16:9 ratio (5 / 2.81) -->
+            <a-video id="video-display" position="0 0.4 0" width="5" height="2.81" visible="false"></a-video>
 
             <a-entity id="choices-container" position="0 0 0">
                 
@@ -414,10 +447,23 @@
         document.addEventListener('DOMContentLoaded', function () {
             const normalBtn = document.getElementById('normalModeBtn');
             const vrBtn = document.getElementById('vrModeBtn');
+            const bgRadios = document.getElementsByName('bgMode');
+            const skyEl = document.getElementById('bg-sky');
 
             if (!normalBtn || !vrBtn) return;
 
             normalBtn.classList.add('active');
+
+            // Achtergrond selector logica
+            bgRadios.forEach(radio => {
+                radio.addEventListener('change', (e) => {
+                    if (e.target.value === 'vr') {
+                        skyEl.setAttribute('visible', 'true');
+                    } else {
+                        skyEl.setAttribute('visible', 'false');
+                    }
+                });
+            });
 
             normalBtn.addEventListener('click', function () {
                 const sceneEl = document.querySelector('a-scene');
@@ -431,7 +477,7 @@
             vrBtn.addEventListener('click', function () {
                 const sceneEl = document.querySelector('a-scene');
                 if (sceneEl && sceneEl.hasLoaded) {
-                     if (sceneEl.systems.webxr.sceneEl.is('ar-mode')) {
+                     if (sceneEl.is('ar-mode')) {
                          sceneEl.enterVR(); 
                      } else {
                          sceneEl.systems.webxr.sessionReferenceSpaceType = 'local-floor';
