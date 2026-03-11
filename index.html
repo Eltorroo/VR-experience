@@ -38,15 +38,15 @@
         // --- A-FRAME COMPONENT: KAS EXPERIENCE ---
         AFRAME.registerComponent('kas-experience', {
             init: function () {
+                // Game State inclusief score
                 this.gameState = {
                     currentScene: 'scene0',
-                    softMistakes: 0,
-                    hardFail: false
+                    score: 0,
+                    maxScore: 100
                 };
 
-                const actieCorrect = () => {};
-                const actieSoftFail = () => { this.gameState.softMistakes++; };
-                const actieHardFail = () => { this.gameState.hardFail = true; };
+                // Functies om de score bij te houden
+                const voegPuntenToe = (punten) => { this.gameState.score += punten; };
 
                 // Scenes Configuratie
                 this.scenesConfig = {
@@ -54,7 +54,9 @@
                         type: 'intro',
                         text: 'Welkom bij de kastechniek-experience.\nKlik op START om te beginnen.',
                         mediaType: 'image', media: '#intro-bg',
-                        choices: [{ text: 'START', next: 'video1' }]
+                        choices: [
+                            { text: 'START', next: 'video1' }
+                        ]
                     },
 
                     // --- DEEL 1 ---
@@ -64,11 +66,11 @@
                     },
                     'vraag1': {
                         type: 'vraag', text: 'Vraag 1: Elke kas is hetzelfde, engineers kopieren en plakken.\nWat denk jij?',
-                        mediaType: 'image', media: '#img-vraag1', // Gekoppeld aan plattegrond.png
+                        mediaType: 'image', media: '#img-vraag1',
                         choices: [
-                            { text: 'Nee, elke teelt, locatie en klant hebben andere eisen', next: 'video2', action: actieCorrect },
-                            { text: 'Ja, een kas is gewoon staal, aluminium en glas', next: 'video2', action: actieSoftFail },
-                            { text: 'Ja, alleen de planten die erin staan verschillen', next: 'video2', action: actieHardFail }
+                            { text: 'Ja, een kas is gewoon staal, aluminium en glas', next: 'video2', action: () => voegPuntenToe(0) },
+                            { text: 'Nee, elke teelt, locatie en klant hebben andere eisen', next: 'video2', action: () => voegPuntenToe(15) }, // CORRECT (15 pt)
+                            { text: 'Ja, alleen de planten die erin staan verschillen', next: 'video2', action: () => voegPuntenToe(0) }
                         ]
                     },
 
@@ -79,11 +81,11 @@
                     },
                     'vraag2': {
                         type: 'vraag', text: 'Vraag 2: De klant heeft duidelijke verwachtingen en eisen.\nWat gebeurt er met deze info?',
-                        mediaType: 'image', media: '#img-vraag2', // Gekoppeld aan waterruimte.png
+                        mediaType: 'image', media: '#img-vraag2',
                         choices: [
-                            { text: 'Dit gaat naar onze fabriek, waar alles op maat gemaakt wordt', next: 'video3', action: actieCorrect },
-                            { text: 'Dit sturen we door naar een extern bedrijf dat alles voor ons maakt', next: 'video3', action: actieSoftFail },
-                            { text: 'Dit gaat het ene oor in en andere oor eruit', next: 'video3', action: actieHardFail }
+                            { text: 'Dit gaat het ene oor in en andere oor eruit', next: 'video3', action: () => voegPuntenToe(0) },
+                            { text: 'Dit sturen we door naar een extern bedrijf dat alles voor ons maakt', next: 'video3', action: () => voegPuntenToe(0) },
+                            { text: 'Dit gaat naar onze fabriek, waar alles op maat gemaakt wordt', next: 'video3', action: () => voegPuntenToe(15) } // CORRECT (15 pt)
                         ]
                     },
 
@@ -94,11 +96,11 @@
                     },
                     'vraag3': {
                         type: 'vraag', text: 'Vraag 3: Je staat in de fabriek en denkt dat een engineer een tekenfout heeft gemaakt.\nWat doe je?',
-                        mediaType: 'image', media: '#img-vraag3', // Gekoppeld aan fabriek.png
+                        mediaType: 'image', media: '#img-vraag3',
                         choices: [
-                            { text: 'Ik meld dit netjes bij de engineer of chef om het aan te passen', next: 'video4', action: actieCorrect },
-                            { text: 'Ik probeer het direct zelf op te lossen zonder overleg', next: 'video4', action: actieSoftFail },
-                            { text: 'De engineers maken geen fouten, ik negeer het en zeg niks', next: 'video4', action: actieHardFail }
+                            { text: 'Ik meld dit netjes bij de engineer of chef om het aan te passen', next: 'video4', action: () => voegPuntenToe(20) }, // CORRECT (20 pt)
+                            { text: 'De engineers maken geen fouten, ik negeer het en zeg niks', next: 'video4', action: () => voegPuntenToe(0) },
+                            { text: 'Ik probeer het direct zelf op te lossen zonder overleg', next: 'video4', action: () => voegPuntenToe(0) }
                         ]
                     },
 
@@ -109,11 +111,11 @@
                     },
                     'vraag4': {
                         type: 'vraag', text: 'Vraag 4: De kas wordt opgebouwd, wat is tijdens deze fase het belangrijkst?',
-                        mediaType: 'image', media: '#img-vraag4', // Gekoppeld aan bouw.png
+                        mediaType: 'image', media: '#img-vraag4',
                         choices: [
-                            { text: 'Zorgvuldig en veilig werken', next: 'video5', action: actieCorrect },
-                            { text: 'Snel en hard doorwerken, projecten hebben een deadline', next: 'video5', action: actieSoftFail },
-                            { text: 'Zoveel mogelijk materiaal besparen', next: 'video5', action: actieHardFail }
+                            { text: 'Zoveel mogelijk materiaal besparen', next: 'video5', action: () => voegPuntenToe(0) },
+                            { text: 'Snel en hard doorwerken, projecten hebben een deadline', next: 'video5', action: () => voegPuntenToe(0) },
+                            { text: 'Zorgvuldig en veilig werken', next: 'video5', action: () => voegPuntenToe(25) } // CORRECT (25 pt)
                         ]
                     },
 
@@ -124,101 +126,33 @@
                     },
                     'vraag5': {
                         type: 'vraag', text: 'Vraag 5: De kasconstructie is klaar\nWie was er het belangrijkst in dit proces?',
-                        mediaType: 'image', media: '#img-vraag5', // Gekoppeld aan klaar.png
+                        mediaType: 'image', media: '#img-vraag5',
                         choices: [
-                            { text: 'Alle collega\'s die betrokken zijn geweest', next: 'video6', action: actieCorrect },
-                            { text: 'De verkoper en de klant', next: 'video6', action: actieSoftFail },
-                            { text: 'De monteurs in het veld, die de kas hebben opgebouwd', next: 'video6', action: actieHardFail }
+                            { text: 'De verkoper en de klant', next: 'einde', action: () => voegPuntenToe(0) },
+                            // Hier is de ' in collega's gefixt met een backslash er voor!
+                            { text: 'Alle collega\'s die betrokken zijn geweest', next: 'einde', action: () => voegPuntenToe(25) }, // CORRECT (25 pt)
+                            { text: 'De monteurs in het veld, die de kas hebben opgebouwd', next: 'einde', action: () => voegPuntenToe(0) }
                         ]
                     },
 
-                    // --- DEEL 6 (Vanaf hier placeholder foto behouden) ---
-                    'video6': {
-                        type: 'video', text: 'Tijdens de inbedrijfstelling...',
-                        mediaType: 'video', media: '#zesde-video', choices: [], onVideoEnd: 'vraag6'
-                    },
-                    'vraag6': {
-                        type: 'vraag', text: 'Vraag 6: Tijdens het testen hoor je een vreemd tikkend geluid bij de motoren.\nWat doe je?',
-                        mediaType: 'image', media: '#vraag-foto',
-                        choices: [
-                            { text: 'Systeem veilig uitschakelen en de aandrijving fysiek controleren', next: 'video7', action: actieCorrect },
-                            { text: 'Even aankijken of het geluid vanzelf weer verdwijnt', next: 'video7', action: actieSoftFail },
-                            { text: 'De muziek harder zetten, een nieuwe motor moet even inslijten', next: 'video7', action: actieHardFail }
-                        ]
-                    },
-
-                    // --- DEEL 7 ---
-                    'video7': {
-                        type: 'video', text: 'De klimaatbeheersing wordt geactiveerd...',
-                        mediaType: 'video', media: '#zevende-video', choices: [], onVideoEnd: 'vraag7'
-                    },
-                    'vraag7': {
-                        type: 'vraag', text: 'Vraag 7: De computer geeft een plotselinge temperatuuralarm.\nWat is je eerste actie?',
-                        mediaType: 'image', media: '#vraag-foto',
-                        choices: [
-                            { text: 'Op afstand de sensorwaarden uitlezen en een diagnose stellen', next: 'video8', action: actieCorrect },
-                            { text: 'Direct een monteur in de auto zetten zonder voorkennis', next: 'video8', action: actieSoftFail },
-                            { text: 'Het alarm resetten, systemen hebben vaak valse meldingen', next: 'video8', action: actieHardFail }
-                        ]
-                    },
-
-                    // --- DEEL 8 ---
-                    'video8': {
-                        type: 'video', text: 'Innovatie en duurzaamheid in de kas...',
-                        mediaType: 'video', media: '#achtste-video', choices: [], onVideoEnd: 'vraag8'
-                    },
-                    'vraag8': {
-                        type: 'vraag', text: 'Vraag 8: De tuinder twijfelt of hij LED-belichting moet toepassen.\nWat adviseer je?',
-                        mediaType: 'image', media: '#vraag-foto',
-                        choices: [
-                            { text: 'Ik bereken de ROI en laat de voordelen voor de plantengroei zien', next: 'video9', action: actieCorrect },
-                            { text: 'Ik zeg dat hij het gewoon moet doen, LED is altijd beter', next: 'video9', action: actieSoftFail },
-                            { text: 'Ik raad het af, oude lampen werken toch ook nog prima?', next: 'video9', action: actieHardFail }
-                        ]
-                    },
-
-                    // --- DEEL 9 ---
-                    'video9': {
-                        type: 'video', text: 'Onderhoud is cruciaal voor een lange levensduur...',
-                        mediaType: 'video', media: '#negende-video', choices: [], onVideoEnd: 'vraag9'
-                    },
-                    'vraag9': {
-                        type: 'vraag', text: 'Vraag 9: Hoe richten we het toekomstige onderhoud voor deze kas in?',
-                        mediaType: 'image', media: '#vraag-foto',
-                        choices: [
-                            { text: 'Met een vast preventief onderhoudsschema volgens de handleiding', next: 'video10', action: actieCorrect },
-                            { text: 'We plannen af en toe wat in als we toevallig in de buurt zijn', next: 'video10', action: actieSoftFail },
-                            { text: 'Pas ingrijpen wanneer de tuinder belt dat alles stilstaat', next: 'video10', action: actieHardFail }
-                        ]
-                    },
-
-                    // --- DEEL 10 ---
-                    'video10': {
-                        type: 'video', text: 'Het project is succesvol doorlopen.',
-                        mediaType: 'video', media: '#tiende-video', choices: [], onVideoEnd: 'vraag10'
-                    },
-                    'vraag10': {
-                        type: 'vraag', text: 'Vraag 10: Tijd voor de formele overdracht.\nHoe sluit je het af met de tuinder?',
-                        mediaType: 'image', media: '#vraag-foto',
-                        choices: [
-                            { text: 'Een eindevaluatie doen en alle documentatie netjes overdragen', next: 'einde', action: actieCorrect },
-                            { text: 'Sleutels inleveren, een handje schudden en snel door naar huis', next: 'einde', action: actieSoftFail },
-                            { text: 'Direct de eindfactuur sturen en verder niets meer van je laten horen', next: 'einde', action: actieHardFail }
-                        ]
-                    },
-
-                    // --- EINDE ---
+                    // --- EINDE (Scorescherm) ---
                     'einde': {
                         type: 'einde',
                         text: () => {
-                            if (this.gameState.hardFail) return 'Resultaat: Slecht.\nEr is een kritieke fout gemaakt (Hard Fail). De kas functioneert niet veilig.';
-                            if (this.gameState.softMistakes >= 3) return 'Resultaat: Matig.\nDe kas draait, maar met veel haken en ogen door slordige keuzes.';
-                            if (this.gameState.softMistakes > 0) return 'Resultaat: Prima.\nJe hebt de kas draaiend gekregen, op een paar kleine verbeterpuntjes na.';
-                            return 'Resultaat: Uitstekend!\nEen perfecte, foutloze en duurzame installatie afgeleverd.';
+                            const score = this.gameState.score;
+                            let beoordeling = '';
+                            
+                            // Logica voor de beoordelingstekst
+                            if (score === 100) beoordeling = 'Uitmuntend! Je hebt een perfect inzicht in onze processen.';
+                            else if (score >= 70) beoordeling = 'Goed gedaan! Je hebt de belangrijkste zaken goed op orde.';
+                            else if (score >= 40) beoordeling = 'Matig. Je hebt de basis door, maar er is ruimte voor verbetering.';
+                            else beoordeling = 'Onvoldoende. Let in de toekomst beter op de veiligheid en samenwerking.';
+                            
+                            return `Einde van de experience!\n\nJouw score: ${score} van de 100 punten.\n\n${beoordeling}`;
                         },
                         mediaType: 'image', media: '#intro-bg',
                         choices: [
-                            { text: 'OPNIEUW SPELEN', next: 'scene0', action: () => { this.gameState.softMistakes = 0; this.gameState.hardFail = false; } }
+                            { text: 'OPNIEUW SPELEN', next: 'scene0', action: () => { this.gameState.score = 0; } }
                         ]
                     }
                 };
@@ -314,20 +248,17 @@
                     if (sceneData.media) {
                         const imgEl = document.querySelector(sceneData.media);
                         
-                        // AUTO-FIT LOGICA: Schaal de afbeelding proportioneel
                         const applyImageFit = () => {
-                            let nw = imgEl.naturalWidth || 800; // Fallback breedte
-                            let nh = imgEl.naturalHeight || 600; // Fallback hoogte
+                            let nw = imgEl.naturalWidth || 800; 
+                            let nh = imgEl.naturalHeight || 600; 
                             let aspect = nw / nh;
                             
-                            // Maximale afmetingen in VR (zodat het altijd in beeld past)
                             let maxHeight = 2.5;
                             let maxWidth = 6.0;
                             
                             let calcHeight = maxHeight;
                             let calcWidth = calcHeight * aspect;
                             
-                            // Als hij te breed wordt, schaal omlaag op basis van de breedte
                             if (calcWidth > maxWidth) {
                                 calcWidth = maxWidth;
                                 calcHeight = calcWidth / aspect;
@@ -344,7 +275,6 @@
                         } else if (imgEl) {
                             imgEl.onload = applyImageFit;
                         } else {
-                            // Mocht de foto niet gevonden worden
                             this.elImage.setAttribute('src', sceneData.media);
                             this.elImage.setAttribute('visible', 'true');
                         }
@@ -364,10 +294,15 @@
                         const choice = choicesArray[index];
                         
                         let y = 0, width = 1.5, height = 0.5;
-                        if (this.gameState.currentScene === 'scene0' || this.gameState.currentScene === 'einde') {
-                            y = -0.5; width = 2.4; height = 0.8;
+                        
+                        // Layout voor start/eind knoppen vs 3-keuze vragen
+                        if (this.gameState.currentScene === 'scene0') {
+                            y = -0.5 - (index * 0.9); // Knop 1 en 2 onder elkaar
+                            width = 3.5; height = 0.7;
+                        } else if (this.gameState.currentScene === 'einde') {
+                            y = -1.0; width = 2.4; height = 0.8;
                         } else if (isVraag) {
-                            const startY = -1.2; // Iets lager gezet voor betere leesbaarheid onder de foto
+                            const startY = -1.2; 
                             const rowSpacing = 0.65;
                             y = startY - (index * rowSpacing);
                             width = 4.2; height = 0.5;
@@ -388,7 +323,7 @@
 
                         textEl.setAttribute('value', choice.text);
                         textEl.setAttribute('width', width * 0.9);
-                        textEl.setAttribute('wrap-count', isVraag ? '45' : '20');
+                        textEl.setAttribute('wrap-count', isVraag ? '45' : '30');
 
                     } else {
                         btnEntity.setAttribute('visible', 'false');
@@ -404,12 +339,25 @@
         <button id="normalModeBtn">Normaal scherm</button>
         <button id="vrModeBtn">VR bril / Passthrough</button>
     </div>
+
+<div style="position: fixed; top: 10px; right: 10px; z-index: 9999; background: #0b1723; padding: 12px; border-radius: 6px; border: 2px solid #0b7c58;">
+        <div style="margin-bottom: 8px; font-weight: bold; font-size: 14px;">Achtergrond:</div>
+        <label style="cursor: pointer; display: block; margin-bottom: 5px;">
+            <input type="radio" name="bgMode" checked onchange="document.getElementById('bg-sky').setAttribute('visible', 'false')"> 
+            AR (Doorzichtig)
+        </label>
+        <label style="cursor: pointer; display: block;">
+            <input type="radio" name="bgMode" onchange="document.getElementById('bg-sky').setAttribute('visible', 'true')"> 
+            VR (Zwarte bioscoop)
+        </label>
+    </div>
     
     <a-scene kas-experience transparent="true" webxr="optionalFeatures: dom-overlay, hit-test; referenceSpaceType: local-floor" device-orientation-permission-ui="enabled: true">
 
+        <a-sky id="bg-sky" color="#111" visible="false"></a-sky>
+
         <a-assets>
             <img id="intro-bg" src="startpagina.png" crossorigin="anonymous">
-            <img id="vraag-foto" src="https://via.placeholder.com/1024x512/005500/FFFFFF?text=Stelling+Foto" crossorigin="anonymous">
 
             <img id="img-vraag1" src="plattegrond.png" crossorigin="anonymous">
             <img id="img-vraag2" src="waterruimte.png" crossorigin="anonymous">
@@ -422,11 +370,6 @@
             <video id="derde-video" src="derde.mp4" playsinline webkit-playsinline crossorigin="anonymous"></video>
             <video id="vierde-video" src="vierde.mp4" playsinline webkit-playsinline crossorigin="anonymous"></video>
             <video id="vijfde-video" src="vijfde.mp4" playsinline webkit-playsinline crossorigin="anonymous"></video>
-            <video id="zesde-video" src="zesde.mp4" playsinline webkit-playsinline crossorigin="anonymous"></video>
-            <video id="zevende-video" src="zevende.mp4" playsinline webkit-playsinline crossorigin="anonymous"></video>
-            <video id="achtste-video" src="achtste.mp4" playsinline webkit-playsinline crossorigin="anonymous"></video>
-            <video id="negende-video" src="negende.mp4" playsinline webkit-playsinline crossorigin="anonymous"></video>
-            <video id="tiende-video" src="tiende.mp4" playsinline webkit-playsinline crossorigin="anonymous"></video>
         </a-assets>
 
         <a-entity camera look-controls position="0 1.6 0">
