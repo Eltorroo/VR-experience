@@ -377,18 +377,26 @@
     <div id="bg-selector" class="ui-overlay">
         <div class="bg-label">Achtergrond:</div>
         <label class="bg-option">
-            <input type="radio" name="bgMode" value="ar" checked> 
-            AR (Doorzichtig)
+            <input type="radio" name="bgMode" value="cinema"> 
+            Bioscoop (Zwart)
+        </label>
+        <label class="bg-option">
+            <input type="radio" name="bgMode" value="vr" checked> 
+            VR (360 graden)
         </label>
         <label class="bg-option" style="margin-bottom: 0;">
-            <input type="radio" name="bgMode" value="vr"> 
-            VR (360 graden kas)
+            <input type="radio" name="bgMode" value="ar"> 
+            AR (Doorzichtig)
         </label>
     </div>
     
     <a-scene kas-experience transparent="true" webxr="optionalFeatures: dom-overlay, hit-test; referenceSpaceType: local-floor" device-orientation-permission-ui="enabled: true">
 
-        <a-videosphere id="bg-sky" src="#bg-360" rotation="0 -90 0" visible="false"></a-videosphere>
+        <!-- 360 Video Achtergrond -->
+        <a-videosphere id="bg-sky" src="#bg-360" rotation="0 -90 0" visible="true"></a-videosphere>
+        
+        <!-- Bioscoop Zwarte Achtergrond -->
+        <a-sky id="bg-black" color="#000000" visible="false"></a-sky>
 
         <a-assets>
             <video id="bg-360" src="360 graden.mp4" autoplay loop muted playsinline webkit-playsinline crossorigin="anonymous"></video>
@@ -414,7 +422,7 @@
         <a-entity laser-controls="hand: left" raycaster="objects: .clickable"></a-entity>
         <a-entity laser-controls="hand: right" raycaster="objects: .clickable"></a-entity>
 
-        <<a-entity id="ui-container" position="0 1.5 -4.5">
+        <a-entity id="ui-container" position="0 1.5 -4.5">
             <a-plane position="0 0.5 -0.05" width="7" height="4.5" color="#000" opacity="0.6" material="shader: flat; transparent: true"></a-plane>
             
             <a-text id="question-text" value="Laden..." align="center"
@@ -454,18 +462,25 @@
             const vrBtn = document.getElementById('vrModeBtn');
             const bgRadios = document.getElementsByName('bgMode');
             const skyEl = document.getElementById('bg-sky');
+            const blackEl = document.getElementById('bg-black');
 
             if (!normalBtn || !vrBtn) return;
 
             normalBtn.classList.add('active');
 
-            // Achtergrond selector logica
+            // Achtergrond selector logica (Bioscoop / VR / AR)
             bgRadios.forEach(radio => {
                 radio.addEventListener('change', (e) => {
-                    if (e.target.value === 'vr') {
+                    const mode = e.target.value;
+                    if (mode === 'vr') {
                         skyEl.setAttribute('visible', 'true');
-                    } else {
+                        blackEl.setAttribute('visible', 'false');
+                    } else if (mode === 'cinema') {
                         skyEl.setAttribute('visible', 'false');
+                        blackEl.setAttribute('visible', 'true');
+                    } else { // AR (Doorzichtig)
+                        skyEl.setAttribute('visible', 'false');
+                        blackEl.setAttribute('visible', 'false');
                     }
                 });
             });
