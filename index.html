@@ -217,8 +217,8 @@
 
                 document.body.addEventListener('click', () => {
                     document.querySelectorAll('video').forEach(v => {
-                        if (v.paused) {
-                            v.muted = true;
+                        if (v.paused && v.id !== 'bg-360') { 
+                            v.muted = false; // Normale video's mogen geluid maken
                             v.play().then(() => v.pause()).catch(() => {});
                         }
                     });
@@ -252,9 +252,11 @@
                 this.elText.setAttribute('value', textValue);
 
                 document.querySelectorAll('video').forEach(vid => {
-                    vid.pause();
-                    vid.currentTime = 0;
-                    vid.onended = null;
+                    if (vid.id !== 'bg-360') { // Sluit de 360-achtergrond uit!
+                        vid.pause();
+                        vid.currentTime = 0;
+                        vid.onended = null;
+                    }
                 });
 
                 if (sceneData.mediaType === 'video') {
@@ -380,15 +382,17 @@
         </label>
         <label class="bg-option" style="margin-bottom: 0;">
             <input type="radio" name="bgMode" value="vr"> 
-            VR (Zwarte bioscoop)
+            VR (360 graden kas)
         </label>
     </div>
     
     <a-scene kas-experience transparent="true" webxr="optionalFeatures: dom-overlay, hit-test; referenceSpaceType: local-floor" device-orientation-permission-ui="enabled: true">
 
-        <a-sky id="bg-sky" color="#111" visible="false"></a-sky>
+        <a-videosphere id="bg-sky" src="#bg-360" rotation="0 -90 0" visible="false"></a-videosphere>
 
         <a-assets>
+            <video id="bg-360" src="360 graden.mp4" autoplay loop muted playsinline webkit-playsinline crossorigin="anonymous"></video>
+            
             <img id="intro-bg" src="startpagina.png" crossorigin="anonymous">
 
             <img id="img-vraag1" src="plattegrond.png" crossorigin="anonymous">
@@ -410,7 +414,8 @@
         <a-entity laser-controls="hand: left" raycaster="objects: .clickable"></a-entity>
         <a-entity laser-controls="hand: right" raycaster="objects: .clickable"></a-entity>
 
-        <a-entity id="ui-container" position="0 1.5 -3">
+        <<a-entity id="ui-container" position="0 1.5 -4.5">
+            <a-plane position="0 0.5 -0.05" width="7" height="4.5" color="#000" opacity="0.6" material="shader: flat; transparent: true"></a-plane>
             
             <a-text id="question-text" value="Laden..." align="center"
                     position="0 2.2 0" width="4.5" wrap-count="45"
