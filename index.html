@@ -108,7 +108,7 @@
                         ]
                     },
                     'vraag1b': {
-                        type: 'vraag', text: 'Voor een duurzame orchideeënkas verzorgen we het klimaat en de automatisering.\n\nWat maakt rendabele fossielvrije teelt mogelijk?',
+                        type: 'vraag', text: 'Voor een duurzame orchideeenkas verzorgen we het klimaat en de automatisering.\n\nWat maakt rendabele fossielvrije teelt mogelijk?',
                         mediaType: 'image', media: '#img-vraag1b',
                         choices: [
                             { text: 'Aquathermie en industriele warmtepompen', next: 'video2', action: () => voegPuntenToe(0) },
@@ -136,7 +136,7 @@
 
                     // --- DEEL 3 ---
                     'video3': {
-                        type: 'video', text: 'Onze lassers maken de tekeningen nauwkeurig na, daarnaast is er ook veel geautomatiseerd. De tekeningen die jij maakt, worden in de fabriek achter het kantoor omgezet naar realiteit. ',
+                        type: 'video', text: 'Onze lassers maken de tekeningen nauwkeurig na, daarnaast is er ook veel geautomatiseerd. De tekeningen die de constructeur maakt, worden in de fabriek achter het kantoor omgezet naar realiteit. ',
                         mediaType: 'video', media: '#derde-video', choices: [], onVideoEnd: 'vraag3'
                     },
                     'vraag3': {
@@ -165,7 +165,7 @@
                         ]
                     },
                     'vraag4b': {
-                        type: 'vraag', text: 'Voor een nieuwbouwproject van 12 hectare kas in Oostenrijk verzorgen wij het volledige traject: van ontwerp tot assemblage.\n\nHoeveel vrachtwagens gaan er de komende maanden naar dit project?',
+                        type: 'vraag', text: 'Voor een 12 hectare kasproject in Oostenrijk verzorgen wij het volledige traject.\n\nHoeveel vrachtwagens gaan er de komende maanden naar dit project?',
                         mediaType: 'image', media: '#img-vraag4-heftruck',
                         choices: [
                             { text: 'Tussen de 25 en 75', next: 'vraag4c', action: () => voegPuntenToe(0) },
@@ -175,7 +175,7 @@
                         ]
                     },
                     'vraag4c': {
-                        type: 'vraag', text: 'We versturen ca. 250 vrachtwagens naar Oostenrijk. Dit vereist een nauwkeurige planning voor het laden en lossen.\n\nWat is cruciaal voor een succesvolle transportcoordinatie?',
+                        type: 'vraag', text: 'We versturen ca. 250 vrachtwagens naar Oostenrijk. Dit vereist een nauwkeurige planning.\n\nWat is cruciaal voor een succesvolle transportcoördinatie?',
                         mediaType: 'image', media: '#img-vraag4b-vrachtwagen',
                         choices: [
                             { text: 'Al het materiaal zo snel mogelijk naar de bouwplaats sturen, zodat het altijd direct beschikbaar is.', next: 'video5', action: () => voegPuntenToe(0) },
@@ -199,7 +199,7 @@
                         ]
                     },
                     'vraag5b': {
-                        type: 'vraag', text: 'Bij de installatie van een pomp wordt opgemerkt dat deze niet goed werkt.\n\nBij de onderstaande metingen wordt 100 Ohm gemeten, wat betekent dat?',
+                        type: 'vraag', text: 'Een geïnstalleerde pomp werkt niet. Een meting geeft 100 Ohm aan.\n\nWat is de oorzaak?',
                         mediaType: 'image', media: '#img-vraag5b-elektro',
                         choices: [
                             { text: 'Te weinig stroom', next: 'vraag5c', action: () => voegPuntenToe(0) },
@@ -207,7 +207,15 @@
                             { text: 'Kortsluiting tussen de behuizing en de fase', next: 'vraag5c', action: () => voegPuntenToe(0) }
                         ]
                     },
-                    
+                    'vraag5c': {
+                        type: 'vraag', text: 'De kas is klaar voor gebruik!\n\nWat is een belangrijke laatste stap voor de oplevering aan de klant?',
+                        mediaType: 'image', media: '#img-vraag5', // Gebruikt 'klaar.png'
+                        choices: [
+                            { text: 'Een uitgebreide rondleiding geven', next: 'einde', action: () => voegPuntenToe(0) },
+                            { text: 'De sleutels overhandigen en vertrekken', next: 'einde', action: () => voegPuntenToe(0) },
+                            { text: 'Alle systemen testen en de klant instructies geven', next: 'einde', action: () => voegPuntenToe(10) } // CORRECT (10 pt)
+                        ]
+                    },
 
                     // --- EINDE (Scorescherm) ---
                     'einde': {
@@ -396,9 +404,9 @@
 
                             if (choicesArray.length === 4) {
                                 // Layout voor 4 antwoorden
-                                height = 0.35;
-                                const rowSpacing = 0.42;
-                                const startY = -0.75;
+                                height = 0.33;
+                                const rowSpacing = 0.40;
+                                const startY = -0.85;
                                 y = startY - (index * rowSpacing);
                             } else { 
                                 // Layout voor 2 of 3 antwoorden
