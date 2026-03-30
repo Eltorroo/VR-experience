@@ -93,16 +93,27 @@
 
                     // --- DEEL 1 ---
                     'video1': {
-                        type: 'video', text: 'Elk project begint met een zorgvuldige planning door onze engineers...',
+                        type: 'video', text: 'Elk project begint met klantcontact en een doordachte engineering op het gebied van constructie en klimaat',
                         mediaType: 'video', media: '#actie-video', choices: [], onVideoEnd: 'vraag1'
                     },
                     'vraag1': {
-                        type: 'vraag', text: 'Vraag 1: Elke kas is hetzelfde, engineers kopieren en plakken.\nWat denk jij?',
+                        type: 'vraag', text: 'We hebben een projectaanvraag voor het bouwen van een kas in kazachstan.\nWaar moet jij als constructie engineer vooral op letten ten opzichte van een Nederlands project?',
                         mediaType: 'image', media: '#img-vraag1',
                         choices: [
-                            { text: 'Ja, een kas is gewoon staal, aluminium en glas', next: 'video2', action: () => voegPuntenToe(0) },
-                            { text: 'Nee, elke teelt, locatie en klant hebben andere eisen', next: 'video2', action: () => voegPuntenToe(15) }, // CORRECT (15 pt)
-                            { text: 'Ja, alleen de planten die erin staan verschillen', next: 'video2', action: () => voegPuntenToe(0) }
+                            { text: 'Klimaatomstandigheden (wind-, sneeuw en temperatuurbelasting)', next: 'vraag1b', action: () => voegPuntenToe(0) },
+                            { text: 'Constructieve eisen (overspanning, kashoogte en stabiliteit)', next: 'vraag1b', action: () => voegPuntenToe(0) },
+                            { text: 'Locatie en regelgeving (bouwcodes en milieu- en vergunningseisen)', next: 'vraag1b', action: () => voegPuntenToe(0) },
+                            { text: 'Al het bovenstaande', next: 'vraag1b', action: () => voegPuntenToe(15) } // CORRECT (15 pt)
+                        ]
+                    },
+                    'vraag1b': {
+                        type: 'vraag', text: 'Momenteel bouwen wij een grote fossielvrije/duurzame kas voor orchideeënteelt, hierbij verzorgt Maurice Kassenbouw en Cogas de vormgeving van het klimaat en de automatisering.\nWat denk jij dat rendabele fossielvrije teelt mogelijk maakt?',
+                        mediaType: 'image', media: '#img-vraag1b',
+                        choices: [
+                            { text: 'Aquathermie en industriële warmtepompen ', next: 'video2', action: () => voegPuntenToe(0) },
+                            { text: 'E-boilers met actieve luchtbehandeling (ontvochtiging)', next: 'video2', action: () => voegPuntenToe(0) },
+                            { text: 'Diepe ondergronds warmte/koud seizoensopslag', next: 'video2', action: () => voegPuntenToe(0) },
+                            { text: 'Een doordachte combinatie van de hierboven benoemde systemen', next: 'video2', action: () => voegPuntenToe(15) } // Pas hier eventueel de te behalen punten aan
                         ]
                     },
 
@@ -404,6 +415,7 @@
             <img id="intro-bg" src="startpagina.png" crossorigin="anonymous">
 
             <img id="img-vraag1" src="plattegrond.png" crossorigin="anonymous">
+            <img id="img-vraag1b" src="Fossielvrij.png" crossorigin="anonymous">
             <img id="img-vraag2" src="waterruimte.png" crossorigin="anonymous">
             <img id="img-vraag3" src="fabriek.png" crossorigin="anonymous">
             <img id="img-vraag4" src="bouw.png" crossorigin="anonymous">
