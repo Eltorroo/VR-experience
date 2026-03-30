@@ -74,7 +74,7 @@
                 this.gameState = {
                     currentScene: 'scene0',
                     score: 0,
-                    maxScore: 115 // Totaal van 15+15+15+20+25+25
+                    maxScore: 135 // Totaal van 15+15+15+20+20+10+15+25
                 };
 
                 // Functies om de score bij te houden
@@ -93,11 +93,11 @@
 
                     // --- DEEL 1 ---
                     'video1': {
-                        type: 'video', text: 'Elk project begint met klantcontact en een doordachte engineering op het gebied van constructie en klimaat',
+                        type: 'video', text: 'Elk project begint met klantcontact en een doordachte engineering op het gebied van constructie en klimaat.',
                         mediaType: 'video', media: '#actie-video', choices: [], onVideoEnd: 'vraag1'
                     },
                     'vraag1': {
-                        type: 'vraag', text: 'We hebben een projectaanvraag voor een kas in Kazachstan.\n\nWaar moet jij als constructie-engineer vooral op letten?',
+                        type: 'vraag', text: 'We hebben een nieuwe projectaanvraag voor een kas in Kazachstan.\n\nWaar moet jij als constructie-engineer vooral op letten?',
                         mediaType: 'image', media: '#img-vraag1',
                         choices: [
                             { text: 'Klimaatomstandigheden (wind-, sneeuw en temperatuurbelasting)', next: 'vraag1b', action: () => voegPuntenToe(0) },
@@ -126,39 +126,59 @@
                         type: 'vraag', text: 'Het verkoopteam doet er alles aan om een goede deal te sluiten.\nWat is het allerbelangrijkste tijdens dit proces?',
                         mediaType: 'image', media: '#img-vraag2',
                         choices: [
-                            { text: '-	Het optimaliseren van de winst, ten kosten van andere factoren', next: 'video3', action: () => voegPuntenToe(0) },
-                            { text: '-	Alles beloven wat de klant in zijn kas wil hebben', next: 'video3', action: () => voegPuntenToe(0) },
-                            { text: 'Intensief communiceren met de klant én met onze eigen engineers, zodat de oplossing technisch klopt en zowel klant als leverancier winnen', next: 'video3', action: () => voegPuntenToe(15) } // CORRECT (15 pt)
+                            { text: 'Het optimaliseren van de winst, ten kosten van andere factoren', next: 'video3', action: () => voegPuntenToe(0) },
+                            { text: 'Alles beloven wat de klant in zijn kas wil hebben', next: 'video3', action: () => voegPuntenToe(0) },
+                            { text: 'Intensief communiceren met de klant en met onze eigen engineers, zodat de oplossing technisch klopt en zowel klant als leverancier winnen', next: 'video3', action: () => voegPuntenToe(15) } // CORRECT (15 pt)
                         ]
                     },
 
                     // --- DEEL 3 ---
                     'video3': {
-                        type: 'video', text: 'De info wordt door engineers omgezet naar tekeningen voor de fabriek.',
+                        type: 'video', text: 'Onze lassers maken de tekeningen nauwkeurig na, daarnaast is er ook veel geautomatiseerd. De tekeningen die jij maakt, worden in de fabriek achter het kantoor omgezet naar realiteit. ',
                         mediaType: 'video', media: '#derde-video', choices: [], onVideoEnd: 'vraag3'
                     },
                     'vraag3': {
-                        type: 'vraag', text: 'Vraag 3: Je staat in de fabriek en denkt dat een engineer een tekenfout heeft gemaakt.\nWat doe je?',
+                        type: 'vraag', text: 'Er wordt bij ons veel gelast aan staalconstructie, verwarmingsbuizen en gasleidingen.\nWelk lasproces wordt voor staalconstructie en gasleidingen ingezet?',
                         mediaType: 'image', media: '#img-vraag3',
                         choices: [
-                            { text: 'Ik meld dit netjes bij de engineer of chef om het aan te passen', next: 'video4', action: () => voegPuntenToe(20) }, // CORRECT (20 pt)
-                            { text: 'De engineers maken geen fouten, ik negeer het en zeg niks', next: 'video4', action: () => voegPuntenToe(0) },
-                            { text: 'Ik probeer het direct zelf op te lossen zonder overleg', next: 'video4', action: () => voegPuntenToe(0) }
+                            { text: 'BmBe en TIG lassen', next: 'video4', action: () => voegPuntenToe(0) },
+                            { text: 'MAG en TIG lassen', next: 'video4', action: () => voegPuntenToe(20) },
+                            { text: 'OP en MAG lassen', next: 'video4', action: () => voegPuntenToe(0) }
                         ]
                     },
 
                     // --- DEEL 4 ---
                     'video4': {
-                        type: 'video', text: 'Kijk mee naar de opbouw...',
+                        type: 'video', text: 'Kijk mee bij een nieuwbouwproject.',
                         mediaType: 'video', media: '#vierde-video', choices: [], onVideoEnd: 'vraag4'
                     },
                     'vraag4': {
-                        type: 'vraag', text: 'Vraag 4: De kas wordt opgebouwd, wat is tijdens deze fase het belangrijkst?',
-                        mediaType: 'image', media: '#img-vraag4',
+                        type: 'vraag', text: 'Momenteel loopt er een groot nieuwbouwproject van 12 hectare kas in Oostenrijk. Maurice Kassenbouw en Cogas mogen vanaf het begin tot het einde alles ontwerpen, produceren/inkopen en assembleren op locatie. \nHoeveel vrachtwagens denk jij dat de komende maanden naar Oostenrijk gaan voor dit project? ',
+                        mediaType: 'image', media: '#img-vraag4-heftruck',
                         choices: [
-                            { text: 'Zoveel mogelijk materiaal besparen', next: 'video5', action: () => voegPuntenToe(0) },
-                            { text: 'Snel en hard doorwerken, projecten hebben een deadline', next: 'video5', action: () => voegPuntenToe(0) },
-                            { text: 'Zorgvuldig en veilig werken', next: 'video5', action: () => voegPuntenToe(25) } // CORRECT (25 pt)
+                            { text: 'Tussen de 25 en 75', next: 'vraag4b', action: () => voegPuntenToe(0) },
+                            { text: 'Tussen de 75 en 150', next: 'vraag4b', action: () => voegPuntenToe(0) },
+                             { text: 'Tussen de 150 en 225', next: 'vraag4b', action: () => voegPuntenToe(0) },
+                            { text: 'Meer dan 225', next: 'vraag4b', action: () => voegPuntenToe(20) } // CORRECT (20 pt)
+                        ]
+                    },
+                    'vraag4b': {
+                        type: 'vraag', text: 'De komende maanden zullen wij ongeveer 250 vrachtwagens versturen naar Oostenrijk. Dit vereist een nauwkeurige planning, alles moet in Nederland voorbereid en ingeladen worden, en in Oostenrijk weer uitgeladen.\n\nWat is cruciaal voor een succesvolle transport coördinatie?',
+                        mediaType: 'image', media: '#img-vraag4b-vrachtwagen',
+                        choices: [
+                            { text: 'Al het materiaal moet zo snel mogelijk naar de bouwplaats toe. Als er iemand wat nodig heeft, dan is het materiaal altijd aanwezig.', next: 'vraag4c', action: () => voegPuntenToe(0) },
+                            { text: 'Een strakke planning met duidelijke communicatie naar alle stakeholders. Materiaal wordt verstuurd wanneer het binnenkort nodig is op de bouw, i.v.m. een efficiënte ruimtelijke indeling op de bouwplaats.', next: 'vraag4c', action: () => voegPuntenToe(10) }, // CORRECT (10 pt)
+                            { text: 'De planning is flexibel en ik ben zelf goed op de hoogte van het geplande transport de komende dagen, de mensen die op de bouw aanwezig zijn helpen met uitladen wanneer het aankomt.', next: 'vraag4c', action: () => voegPuntenToe(0) }
+                        ]
+                    },
+                    'vraag4c': {
+                        type: 'vraag', text: 'Wat zijn de hoofdmaterialen bij het bouwen van een kas? En in welke volgorde worden de materialen bij een nieuwbouwproject toegepast?',
+                        mediaType: 'image', media: '#img-vraag4', // Deze vraag gebruikt nu bouw.png
+                        choices: [
+                            { text: 'Beton, staal, glas en plastic', next: 'video5', action: () => voegPuntenToe(0) },
+                            { text: 'Steen, aluminium, staal en glas', next: 'video5', action: () => voegPuntenToe(0) },
+                             { text: 'Beton, staal, aluminium en glas. ', next: 'video5', action: () => voegPuntenToe(0) },
+                            { text: 'Beton, staal, glas en aluminium', next: 'video5', action: () => voegPuntenToe(15) } // CORRECT (15 pt)
                         ]
                     },
 
@@ -185,10 +205,10 @@
                             const score = this.gameState.score;
                             let beoordeling = '';
                             
-                            // Logica voor de beoordelingstekst (max score is 115)
-                            if (score === 115) beoordeling = 'Uitmuntend! Je hebt een perfect inzicht in onze processen.';
-                            else if (score >= 85) beoordeling = 'Goed gedaan! Je hebt de belangrijkste zaken goed op orde.';
-                            else if (score >= 50) beoordeling = 'Matig. Je hebt de basis door, maar er is ruimte voor verbetering.';
+                            // Logica voor de beoordelingstekst (max score is 135)
+                            if (score === 135) beoordeling = 'Uitmuntend! Je hebt een perfect inzicht in onze processen.';
+                            else if (score >= 100) beoordeling = 'Goed gedaan! Je hebt de belangrijkste zaken goed op orde.';
+                            else if (score >= 65) beoordeling = 'Matig. Je hebt de basis door, maar er is ruimte voor verbetering.';
                             else beoordeling = 'Onvoldoende. Let in de toekomst beter op de veiligheid en samenwerking.';
                             
                             return `Einde van de experience!\n\nJouw score: ${score} van de ${this.gameState.maxScore} punten.\n\n${beoordeling}`;
@@ -438,6 +458,8 @@
             <img id="img-vraag2" src="waterruimte.png" crossorigin="anonymous">
             <img id="img-vraag3" src="fabriek.png" crossorigin="anonymous">
             <img id="img-vraag4" src="bouw.png" crossorigin="anonymous">
+            <img id="img-vraag4-heftruck" src="heftruck.png" crossorigin="anonymous">
+            <img id="img-vraag4b-vrachtwagen" src="vrachtwagen.png" crossorigin="anonymous">
             <img id="img-vraag5" src="klaar.png" crossorigin="anonymous">
 
             <video id="actie-video" src="intro.mp4" playsinline webkit-playsinline crossorigin="anonymous"></video>
