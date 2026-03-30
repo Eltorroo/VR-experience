@@ -74,7 +74,7 @@
                 this.gameState = {
                     currentScene: 'scene0',
                     score: 0,
-                    maxScore: 100
+                    maxScore: 115 // Totaal van 15+15+15+20+25+25
                 };
 
                 // Functies om de score bij te houden
@@ -97,38 +97,38 @@
                         mediaType: 'video', media: '#actie-video', choices: [], onVideoEnd: 'vraag1'
                     },
                     'vraag1': {
-                        type: 'vraag', text: 'We hebben een projectaanvraag voor het bouwen van een kas in kazachstan.\nWaar moet jij als constructie engineer vooral op letten ten opzichte van een Nederlands project?',
+                        type: 'vraag', text: 'We hebben een projectaanvraag voor een kas in Kazachstan.\n\nWaar moet jij als constructie-engineer vooral op letten?',
                         mediaType: 'image', media: '#img-vraag1',
                         choices: [
                             { text: 'Klimaatomstandigheden (wind-, sneeuw en temperatuurbelasting)', next: 'vraag1b', action: () => voegPuntenToe(0) },
                             { text: 'Constructieve eisen (overspanning, kashoogte en stabiliteit)', next: 'vraag1b', action: () => voegPuntenToe(0) },
-                            { text: 'Locatie en regelgeving (bouwcodes en milieu- en vergunningseisen)', next: 'vraag1b', action: () => voegPuntenToe(0) },
+                            { text: 'Locatie en regelgeving (bouwcodes, milieu- en vergunningseisen)', next: 'vraag1b', action: () => voegPuntenToe(0) },
                             { text: 'Al het bovenstaande', next: 'vraag1b', action: () => voegPuntenToe(15) } // CORRECT (15 pt)
                         ]
                     },
                     'vraag1b': {
-                        type: 'vraag', text: 'Momenteel bouwen wij een grote fossielvrije/duurzame kas voor orchideeënteelt, hierbij verzorgt Maurice Kassenbouw en Cogas de vormgeving van het klimaat en de automatisering.\nWat denk jij dat rendabele fossielvrije teelt mogelijk maakt?',
+                        type: 'vraag', text: 'Voor een duurzame orchideeënkas verzorgen we het klimaat en de automatisering.\n\nWat maakt rendabele fossielvrije teelt mogelijk?',
                         mediaType: 'image', media: '#img-vraag1b',
                         choices: [
                             { text: 'Aquathermie en industriële warmtepompen ', next: 'video2', action: () => voegPuntenToe(0) },
                             { text: 'E-boilers met actieve luchtbehandeling (ontvochtiging)', next: 'video2', action: () => voegPuntenToe(0) },
-                            { text: 'Diepe ondergronds warmte/koud seizoensopslag', next: 'video2', action: () => voegPuntenToe(0) },
+                            { text: 'Diepe ondergrondse warmte/koude seizoensopslag', next: 'video2', action: () => voegPuntenToe(0) },
                             { text: 'Een doordachte combinatie van de hierboven benoemde systemen', next: 'video2', action: () => voegPuntenToe(15) } // Pas hier eventueel de te behalen punten aan
                         ]
                     },
 
                     // --- DEEL 2 ---
                     'video2': {
-                        type: 'video', text: 'Onze verkoper maakt afspraken met de klant, elke tuinder heeft eigen wensen.',
+                        type: 'video', text: 'Onze verkoper maakt afspraken met de klant, elke tuinder heeft specifieke wensen.',
                         mediaType: 'video', media: '#tweede-video', choices: [], onVideoEnd: 'vraag2'
                     },
                     'vraag2': {
-                        type: 'vraag', text: 'Vraag 2: De klant heeft duidelijke verwachtingen en eisen.\nWat gebeurt er met deze info?',
+                        type: 'vraag', text: 'Het verkoopteam doet er alles aan om een goede deal te sluiten.\nWat is het allerbelangrijkste tijdens dit proces?',
                         mediaType: 'image', media: '#img-vraag2',
                         choices: [
-                            { text: 'Dit gaat het ene oor in en andere oor eruit', next: 'video3', action: () => voegPuntenToe(0) },
-                            { text: 'Dit sturen we door naar een extern bedrijf dat alles voor ons maakt', next: 'video3', action: () => voegPuntenToe(0) },
-                            { text: 'Dit gaat naar onze fabriek, waar alles op maat gemaakt wordt', next: 'video3', action: () => voegPuntenToe(15) } // CORRECT (15 pt)
+                            { text: '-	Het optimaliseren van de winst, ten kosten van andere factoren', next: 'video3', action: () => voegPuntenToe(0) },
+                            { text: '-	Alles beloven wat de klant in zijn kas wil hebben', next: 'video3', action: () => voegPuntenToe(0) },
+                            { text: 'Intensief communiceren met de klant én met onze eigen engineers, zodat de oplossing technisch klopt en zowel klant als leverancier winnen', next: 'video3', action: () => voegPuntenToe(15) } // CORRECT (15 pt)
                         ]
                     },
 
@@ -185,13 +185,13 @@
                             const score = this.gameState.score;
                             let beoordeling = '';
                             
-                            // Logica voor de beoordelingstekst
-                            if (score === 100) beoordeling = 'Uitmuntend! Je hebt een perfect inzicht in onze processen.';
-                            else if (score >= 70) beoordeling = 'Goed gedaan! Je hebt de belangrijkste zaken goed op orde.';
-                            else if (score >= 40) beoordeling = 'Matig. Je hebt de basis door, maar er is ruimte voor verbetering.';
+                            // Logica voor de beoordelingstekst (max score is 115)
+                            if (score === 115) beoordeling = 'Uitmuntend! Je hebt een perfect inzicht in onze processen.';
+                            else if (score >= 85) beoordeling = 'Goed gedaan! Je hebt de belangrijkste zaken goed op orde.';
+                            else if (score >= 50) beoordeling = 'Matig. Je hebt de basis door, maar er is ruimte voor verbetering.';
                             else beoordeling = 'Onvoldoende. Let in de toekomst beter op de veiligheid en samenwerking.';
                             
-                            return `Einde van de experience!\n\nJouw score: ${score} van de 100 punten.\n\n${beoordeling}`;
+                            return `Einde van de experience!\n\nJouw score: ${score} van de ${this.gameState.maxScore} punten.\n\n${beoordeling}`;
                         },
                         mediaType: 'image', media: '#intro-bg',
                         choices: [
@@ -207,21 +207,25 @@
                 this.btnEntities = [
                     document.getElementById('btn-0'),
                     document.getElementById('btn-1'),
-                    document.getElementById('btn-2')
+                    document.getElementById('btn-2'),
+                    document.getElementById('btn-3')
                 ];
                 this.btnPlanes = [
                     document.getElementById('btn-plane-0'),
                     document.getElementById('btn-plane-1'),
-                    document.getElementById('btn-plane-2')
+                    document.getElementById('btn-plane-2'),
+                    document.getElementById('btn-plane-3')
                 ];
                 this.btnTexts = [
                     document.getElementById('btn-text-0'),
                     document.getElementById('btn-text-1'),
-                    document.getElementById('btn-text-2')
+                    document.getElementById('btn-text-2'),
+                    document.getElementById('btn-text-3')
                 ];
 
                 this.btnPlanes.forEach((plane, index) => {
                     plane.addEventListener('click', () => {
+                        if (!plane.classList.contains('clickable')) return;
                         this.handleChoice(index);
                     });
                 });
@@ -329,32 +333,47 @@
                 }
 
                 const choicesArray = typeof sceneData.choices === 'function' ? sceneData.choices() : (sceneData.choices || []);
-                const isVraag = choicesArray.length === 3;
+                const isQuestionScene = choicesArray.length > 1 && this.gameState.currentScene !== 'scene0' && this.gameState.currentScene !== 'einde';
 
                 this.btnEntities.forEach((btnEntity, index) => {
                     const plane = this.btnPlanes[index];
                     const textEl = this.btnTexts[index];
 
                     if (index < choicesArray.length) {
+                        btnEntity.setAttribute('visible', 'true');
+                        plane.classList.add('clickable');
+
                         const choice = choicesArray[index];
-                        
-                        let y = 0, width = 1.5, height = 0.5;
+                        let y, width, height, wrapCount;
                         
                         // Layout voor start/eind knoppen vs 3-keuze vragen
                         if (this.gameState.currentScene === 'scene0') {
                             y = -0.5 - (index * 0.9); // Knop 1 en 2 onder elkaar
                             width = 3.5; height = 0.7;
+                            wrapCount = 30;
                         } else if (this.gameState.currentScene === 'einde') {
                             y = -1.0; width = 2.4; height = 0.8;
-                        } else if (isVraag) {
-                            const startY = -1.2; 
-                            const rowSpacing = 0.65;
-                            y = startY - (index * rowSpacing);
-                            width = 4.2; height = 0.5;
+                            wrapCount = 30;
+                        } else if (isQuestionScene) {
+                            width = 5.5; 
+                            wrapCount = 60;
+
+                            if (choicesArray.length === 4) {
+                                // Layout voor 4 antwoorden
+                                height = 0.35;
+                                const rowSpacing = 0.42;
+                                const startY = -0.8;
+                                y = startY - (index * rowSpacing);
+                            } else { 
+                                // Layout voor 2 of 3 antwoorden
+                                height = 0.45;
+                                const rowSpacing = 0.55;
+                                const startY = -0.9;
+                                y = startY - (index * rowSpacing);
+                            }
                         }
 
                         btnEntity.setAttribute('position', `0 ${y} 0.02`);
-                        btnEntity.setAttribute('visible', 'true');
                         
                         let baseColor = (this.gameState.currentScene === 'einde') ? '#f5a623' : '#0b7c58';
                         let hoverColor = (this.gameState.currentScene === 'einde') ? '#f8bf4a' : '#12a06f';
@@ -368,7 +387,7 @@
 
                         textEl.setAttribute('value', choice.text);
                         textEl.setAttribute('width', width * 0.9);
-                        textEl.setAttribute('wrap-count', isVraag ? '45' : '30');
+                        textEl.setAttribute('wrap-count', wrapCount);
 
                     } else {
                         btnEntity.setAttribute('visible', 'false');
@@ -438,8 +457,8 @@
             <a-plane position="0 0.5 -0.05" width="7" height="4.5" color="#000" opacity="0.6" material="shader: flat; transparent: true"></a-plane>
             
             <a-text id="question-text" value="Laden..." align="center"
-                    position="0 2.2 0" width="4.5" wrap-count="45"
-                    color="#f5f7fa"></a-text>
+                    position="0 2.2 0" width="6" wrap-count="55"
+                    color="#f5f7fa" line-height="60"></a-text>
 
             <a-image id="image-display" position="0 0.5 0" visible="false"></a-image>
 
@@ -461,6 +480,11 @@
                 <a-entity id="btn-2" visible="false">
                     <a-plane id="btn-plane-2" position="0 0 0" material="shader: flat;"></a-plane>
                     <a-text id="btn-text-2" position="0 0 0.01" align="center" color="#FFF"></a-text>
+                </a-entity>
+
+                <a-entity id="btn-3" visible="false">
+                    <a-plane id="btn-plane-3" position="0 0 0" material="shader: flat;"></a-plane>
+                    <a-text id="btn-text-3" position="0 0 0.01" align="center" color="#FFF"></a-text>
                 </a-entity>
 
             </a-entity>
