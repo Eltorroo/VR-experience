@@ -74,8 +74,9 @@
                 this.gameState = {
                     currentScene: 'scene0',
                     score: 0,
-                    maxScore: 135 // Totaal van 15+15+15+20+20+10+15+25
+                    maxScore: 155 // Totaal inclusief de twee nieuwe vragen in deel 5 (2x 10 pt)
                 };
+                this.isTransitioning = false; // Voorkomt dubbele kliks
 
                 // Functies om de score bij te houden
                 const voegPuntenToe = (punten) => { this.gameState.score += punten; };
@@ -93,7 +94,7 @@
 
                     // --- DEEL 1 ---
                     'video1': {
-                        type: 'video', text: 'Elk project begint met klantcontact en een doordachte engineering op het gebied van constructie en klimaat.',
+                        type: 'video', text: 'Elk project begint met goed klantcontact en een doordachte engineering op het gebied van constructie en kasklimaat.',
                         mediaType: 'video', media: '#actie-video', choices: [], onVideoEnd: 'vraag1'
                     },
                     'vraag1': {
@@ -110,7 +111,7 @@
                         type: 'vraag', text: 'Voor een duurzame orchideeënkas verzorgen we het klimaat en de automatisering.\n\nWat maakt rendabele fossielvrije teelt mogelijk?',
                         mediaType: 'image', media: '#img-vraag1b',
                         choices: [
-                            { text: 'Aquathermie en industriële warmtepompen ', next: 'video2', action: () => voegPuntenToe(0) },
+                            { text: 'Aquathermie en industriële warmtepompen', next: 'video2', action: () => voegPuntenToe(0) },
                             { text: 'E-boilers met actieve luchtbehandeling (ontvochtiging)', next: 'video2', action: () => voegPuntenToe(0) },
                             { text: 'Diepe ondergrondse warmte/koude seizoensopslag', next: 'video2', action: () => voegPuntenToe(0) },
                             { text: 'Een doordachte combinatie van de hierboven benoemde systemen', next: 'video2', action: () => voegPuntenToe(15) } // Pas hier eventueel de te behalen punten aan
@@ -126,9 +127,10 @@
                         type: 'vraag', text: 'Het verkoopteam doet er alles aan om een goede deal te sluiten.\nWat is het allerbelangrijkste tijdens dit proces?',
                         mediaType: 'image', media: '#img-vraag2',
                         choices: [
-                            { text: 'Het optimaliseren van de winst, ten kosten van andere factoren', next: 'video3', action: () => voegPuntenToe(0) },
-                            { text: 'Alles beloven wat de klant in zijn kas wil hebben', next: 'video3', action: () => voegPuntenToe(0) },
-                            { text: 'Intensief communiceren met de klant en met onze eigen engineers, zodat de oplossing technisch klopt en zowel klant als leverancier winnen', next: 'video3', action: () => voegPuntenToe(15) } // CORRECT (15 pt)
+                            { text: 'Intensief communiceren met de klant en met engineers, zodat de oplossing technisch klopt en iedereen wint', next: 'video3', action: () => voegPuntenToe(15) }, // CORRECT (15 pt)
+                            { text: 'Het optimaliseren van de winst, ten koste van andere factoren', next: 'video3', action: () => voegPuntenToe(0) },
+                            { text: 'Alles beloven wat de klant in zijn kas wil hebben', next: 'video3', action: () => voegPuntenToe(0) }
+                            
                         ]
                     },
 
@@ -153,48 +155,65 @@
                         mediaType: 'video', media: '#vierde-video', choices: [], onVideoEnd: 'vraag4'
                     },
                     'vraag4': {
-                        type: 'vraag', text: 'Momenteel loopt er een groot nieuwbouwproject van 12 hectare kas in Oostenrijk. Maurice Kassenbouw en Cogas mogen vanaf het begin tot het einde alles ontwerpen, produceren/inkopen en assembleren op locatie. \nHoeveel vrachtwagens denk jij dat de komende maanden naar Oostenrijk gaan voor dit project? ',
-                        mediaType: 'image', media: '#img-vraag4-heftruck',
-                        choices: [
-                            { text: 'Tussen de 25 en 75', next: 'vraag4b', action: () => voegPuntenToe(0) },
-                            { text: 'Tussen de 75 en 150', next: 'vraag4b', action: () => voegPuntenToe(0) },
-                             { text: 'Tussen de 150 en 225', next: 'vraag4b', action: () => voegPuntenToe(0) },
-                            { text: 'Meer dan 225', next: 'vraag4b', action: () => voegPuntenToe(20) } // CORRECT (20 pt)
-                        ]
-                    },
-                    'vraag4b': {
-                        type: 'vraag', text: 'De komende maanden zullen wij ongeveer 250 vrachtwagens versturen naar Oostenrijk. Dit vereist een nauwkeurige planning, alles moet in Nederland voorbereid en ingeladen worden, en in Oostenrijk weer uitgeladen.\n\nWat is cruciaal voor een succesvolle transport coördinatie?',
-                        mediaType: 'image', media: '#img-vraag4b-vrachtwagen',
-                        choices: [
-                            { text: 'Al het materiaal moet zo snel mogelijk naar de bouwplaats toe. Als er iemand wat nodig heeft, dan is het materiaal altijd aanwezig.', next: 'vraag4c', action: () => voegPuntenToe(0) },
-                            { text: 'Een strakke planning met duidelijke communicatie naar alle stakeholders. Materiaal wordt verstuurd wanneer het binnenkort nodig is op de bouw, i.v.m. een efficiënte ruimtelijke indeling op de bouwplaats.', next: 'vraag4c', action: () => voegPuntenToe(10) }, // CORRECT (10 pt)
-                            { text: 'De planning is flexibel en ik ben zelf goed op de hoogte van het geplande transport de komende dagen, de mensen die op de bouw aanwezig zijn helpen met uitladen wanneer het aankomt.', next: 'vraag4c', action: () => voegPuntenToe(0) }
-                        ]
-                    },
-                    'vraag4c': {
                         type: 'vraag', text: 'Wat zijn de hoofdmaterialen bij het bouwen van een kas? En in welke volgorde worden de materialen bij een nieuwbouwproject toegepast?',
                         mediaType: 'image', media: '#img-vraag4', // Deze vraag gebruikt nu bouw.png
                         choices: [
-                            { text: 'Beton, staal, glas en plastic', next: 'video5', action: () => voegPuntenToe(0) },
-                            { text: 'Steen, aluminium, staal en glas', next: 'video5', action: () => voegPuntenToe(0) },
-                             { text: 'Beton, staal, aluminium en glas. ', next: 'video5', action: () => voegPuntenToe(0) },
-                            { text: 'Beton, staal, glas en aluminium', next: 'video5', action: () => voegPuntenToe(15) } // CORRECT (15 pt)
+                            { text: 'Beton, staal, glas en plastic', next: 'vraag4b', action: () => voegPuntenToe(0) },
+                            { text: 'Steen, aluminium, staal en glas', next: 'vraag4b', action: () => voegPuntenToe(0) },
+                            { text: 'Beton, staal, aluminium en glas', next: 'vraag4b', action: () => voegPuntenToe(0) },
+                            { text: 'Beton, staal, glas en aluminium', next: 'vraag4b', action: () => voegPuntenToe(15) } // CORRECT (15 pt)
+                        ]
+                    },
+                    'vraag4b': {
+                        type: 'vraag', text: 'Voor een nieuwbouwproject van 12 hectare kas in Oostenrijk verzorgen wij het volledige traject: van ontwerp tot assemblage.\n\nHoeveel vrachtwagens gaan er de komende maanden naar dit project?',
+                        mediaType: 'image', media: '#img-vraag4-heftruck',
+                        choices: [
+                            { text: 'Tussen de 25 en 75', next: 'vraag4c', action: () => voegPuntenToe(0) },
+                            { text: 'Tussen de 75 en 150', next: 'vraag4c', action: () => voegPuntenToe(0) },
+                             { text: 'Tussen de 150 en 225', next: 'vraag4c', action: () => voegPuntenToe(0) },
+                            { text: 'Meer dan 225', next: 'vraag4c', action: () => voegPuntenToe(20) }
+                        ]
+                    },
+                    'vraag4c': {
+                        type: 'vraag', text: 'We versturen ca. 250 vrachtwagens naar Oostenrijk. Dit vereist een nauwkeurige planning voor het laden en lossen.\n\nWat is cruciaal voor een succesvolle transportcoördinatie?',
+                        mediaType: 'image', media: '#img-vraag4b-vrachtwagen',
+                        choices: [
+                            { text: 'Al het materiaal zo snel mogelijk naar de bouwplaats sturen, zodat het altijd direct beschikbaar is.', next: 'video5', action: () => voegPuntenToe(0) },
+                            { text: 'Een strakke planning en communicatie. Materiaal wordt just-in-time verstuurd voor een efficiënte bouwplaats.', next: 'video5', action: () => voegPuntenToe(10) }, // CORRECT (10 pt)
+                            { text: 'Een flexibele planning. De mensen op de bouw helpen met uitladen wanneer het transport aankomt.', next: 'video5', action: () => voegPuntenToe(0) }
                         ]
                     },
 
                     // --- DEEL 5 ---
                     'video5': {
-                        type: 'video', text: 'De bouw nadert zijn einde...',
+                        type: 'video', text: 'De bouw nadert zijn einde, de kasconstructie komt samen met de verschillende klimaatinstallaties.',
                         mediaType: 'video', media: '#vijfde-video', choices: [], onVideoEnd: 'vraag5'
                     },
                     'vraag5': {
-                        type: 'vraag', text: 'Vraag 5: De kasconstructie is klaar\nWie was er het belangrijkst in dit proces?',
+                        type: 'vraag', text: 'Alle installaties, motoren en pompen worden bekabeld, daarbij gebruiken we voedingskabels, stuurkabels, datakabels en glasvezelverbindingen.\nWat is nog erg belangrijk om als projectleider in de gaten te houden?',
                         mediaType: 'image', media: '#img-vraag5',
                         choices: [
-                            { text: 'De verkoper en de klant', next: 'einde', action: () => voegPuntenToe(0) },
-                            // Hier is de ' in collega's gefixt met een backslash er voor!
-                            { text: 'Alle collega\'s die betrokken zijn geweest', next: 'einde', action: () => voegPuntenToe(25) }, // CORRECT (25 pt)
-                            { text: 'De monteurs in het veld, die de kas hebben opgebouwd', next: 'einde', action: () => voegPuntenToe(0) }
+                            { text: 'Dat er snel gewerkt wordt en alles goed wordt aangesloten', next: 'vraag5b', action: () => voegPuntenToe(0) },
+                            { text: 'Dat de kabels in de kabelgoot goed gescheiden worden, als een voedingskabel naast een stuurkabel ligt kun je storingen krijgen', next: 'vraag5b', action: () => voegPuntenToe(25) }, // CORRECT (25 pt)
+                            { text: 'De gekozen kabels moeten gecontroleerd worden of ze geschikt zijn voor de installatie, engineers maken hier snel fouten mee', next: 'vraag5b', action: () => voegPuntenToe(0) }
+                        ]
+                    },
+                    'vraag5b': {
+                        type: 'vraag', text: 'Kijk naar het elektrische schema\n\nWerkt de installatie zo goed, zo niet. Wat is er mis?',
+                        mediaType: 'image', media: '#img-vraag5', // Pas dit aan naar een nieuw ID als je een andere foto wilt gebruiken
+                        choices: [
+                            { text: 'Fout antwoord A', next: 'vraag5c', action: () => voegPuntenToe(0) },
+                            { text: 'Correct antwoord B', next: 'vraag5c', action: () => voegPuntenToe(10) }, // CORRECT (10 pt)
+                            { text: 'Fout antwoord C', next: 'vraag5c', action: () => voegPuntenToe(0) }
+                        ]
+                    },
+                    'vraag5c': {
+                        type: 'vraag', text: '[EXTRA VRAAG 2 DEEL 5]\n\nTyp hier je tweede nieuwe vraag in.',
+                        mediaType: 'image', media: '#img-vraag5', // Pas dit aan naar een nieuw ID als je een andere foto wilt gebruiken
+                        choices: [
+                            { text: 'Fout antwoord X', next: 'einde', action: () => voegPuntenToe(0) },
+                            { text: 'Correct antwoord Y', next: 'einde', action: () => voegPuntenToe(10) }, // CORRECT (10 pt)
+                            { text: 'Fout antwoord Z', next: 'einde', action: () => voegPuntenToe(0) }
                         ]
                     },
 
@@ -205,10 +224,10 @@
                             const score = this.gameState.score;
                             let beoordeling = '';
                             
-                            // Logica voor de beoordelingstekst (max score is 135)
-                            if (score === 135) beoordeling = 'Uitmuntend! Je hebt een perfect inzicht in onze processen.';
-                            else if (score >= 100) beoordeling = 'Goed gedaan! Je hebt de belangrijkste zaken goed op orde.';
-                            else if (score >= 65) beoordeling = 'Matig. Je hebt de basis door, maar er is ruimte voor verbetering.';
+                            // Logica voor de beoordelingstekst (max score is 155)
+                            if (score >= 155) beoordeling = 'Uitmuntend! Je hebt een perfect inzicht in onze processen.';
+                            else if (score >= 115) beoordeling = 'Goed gedaan! Je hebt de belangrijkste zaken goed op orde.';
+                            else if (score >= 75) beoordeling = 'Matig. Je hebt de basis door, maar er is ruimte voor verbetering.';
                             else beoordeling = 'Onvoldoende. Let in de toekomst beter op de veiligheid en samenwerking.';
                             
                             return `Einde van de experience!\n\nJouw score: ${score} van de ${this.gameState.maxScore} punten.\n\n${beoordeling}`;
@@ -263,11 +282,15 @@
             },
 
             handleChoice: function(index) {
+                if (this.isTransitioning) return; // Voorkom acties als de scene al aan het wisselen is
+                
                 const sceneData = this.scenesConfig[this.gameState.currentScene];
                 const choicesArray = typeof sceneData.choices === 'function' ? sceneData.choices() : (sceneData.choices || []);
                 const choice = choicesArray[index];
 
                 if (!choice) return;
+                
+                this.isTransitioning = true; // Blokkeer nieuwe kliks tot de volgende scene actief is
 
                 const plane = this.btnPlanes[index];
                 plane.setAttribute('color', '#12a06f'); 
@@ -280,6 +303,7 @@
             },
 
             goToScene: function (sceneId) {
+                this.isTransitioning = false; // Reset de klik-blokkade
                 this.gameState.currentScene = sceneId;
                 const sceneData = this.scenesConfig[sceneId];
 
@@ -403,7 +427,6 @@
                         plane.setAttribute('color', baseColor);
                         plane.setAttribute('animation__hover', `property: color; to: ${hoverColor}; startEvents: mouseenter; dur: 200`);
                         plane.setAttribute('animation__leave', `property: color; to: ${baseColor}; startEvents: mouseleave; dur: 200`);
-                        plane.classList.add('clickable');
 
                         textEl.setAttribute('value', choice.text);
                         textEl.setAttribute('width', width * 0.9);
@@ -482,7 +505,7 @@
                     position="0 2.2 0" width="6" wrap-count="55"
                     color="#f5f7fa" line-height="60"></a-text>
 
-            <a-image id="image-display" position="0 0.5 0" visible="false"></a-image>
+            <a-image id="image-display" position="0 0.4 0" visible="false"></a-image>
 
             <!-- Aangepast naar 16:9 ratio (5 / 2.81) -->
             <a-video id="video-display" position="0 0.4 0" width="5" height="2.81" visible="false"></a-video>
