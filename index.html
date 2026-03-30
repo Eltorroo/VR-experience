@@ -111,7 +111,7 @@
                         type: 'vraag', text: 'Voor een duurzame orchideeënkas verzorgen we het klimaat en de automatisering.\n\nWat maakt rendabele fossielvrije teelt mogelijk?',
                         mediaType: 'image', media: '#img-vraag1b',
                         choices: [
-                            { text: 'Aquathermie en industriële warmtepompen', next: 'video2', action: () => voegPuntenToe(0) },
+                            { text: 'Aquathermie en industriele warmtepompen', next: 'video2', action: () => voegPuntenToe(0) },
                             { text: 'E-boilers met actieve luchtbehandeling (ontvochtiging)', next: 'video2', action: () => voegPuntenToe(0) },
                             { text: 'Diepe ondergrondse warmte/koude seizoensopslag', next: 'video2', action: () => voegPuntenToe(0) },
                             { text: 'Een doordachte combinatie van de hierboven benoemde systemen', next: 'video2', action: () => voegPuntenToe(15) } // Pas hier eventueel de te behalen punten aan
@@ -155,7 +155,7 @@
                         mediaType: 'video', media: '#vierde-video', choices: [], onVideoEnd: 'vraag4'
                     },
                     'vraag4': {
-                        type: 'vraag', text: 'Wat zijn de hoofdmaterialen bij het bouwen van een kas? En in welke volgorde worden de materialen bij een nieuwbouwproject toegepast?',
+                        type: 'vraag', text: 'Wat zijn de hoofdmaterialen bij het bouwen van een kas? En in welke volgorde worden deze materialen bij een nieuwbouwproject toegepast?',
                         mediaType: 'image', media: '#img-vraag4', // Deze vraag gebruikt nu bouw.png
                         choices: [
                             { text: 'Beton, staal, glas en plastic', next: 'vraag4b', action: () => voegPuntenToe(0) },
@@ -175,11 +175,11 @@
                         ]
                     },
                     'vraag4c': {
-                        type: 'vraag', text: 'We versturen ca. 250 vrachtwagens naar Oostenrijk. Dit vereist een nauwkeurige planning voor het laden en lossen.\n\nWat is cruciaal voor een succesvolle transportcoördinatie?',
+                        type: 'vraag', text: 'We versturen ca. 250 vrachtwagens naar Oostenrijk. Dit vereist een nauwkeurige planning voor het laden en lossen.\n\nWat is cruciaal voor een succesvolle transportcoordinatie?',
                         mediaType: 'image', media: '#img-vraag4b-vrachtwagen',
                         choices: [
                             { text: 'Al het materiaal zo snel mogelijk naar de bouwplaats sturen, zodat het altijd direct beschikbaar is.', next: 'video5', action: () => voegPuntenToe(0) },
-                            { text: 'Een strakke planning en communicatie. Materiaal wordt just-in-time verstuurd voor een efficiënte bouwplaats.', next: 'video5', action: () => voegPuntenToe(10) }, // CORRECT (10 pt)
+                            { text: 'Een strakke planning en communicatie. Materiaal wordt just-in-time verstuurd voor een efficiente bouwplaats.', next: 'video5', action: () => voegPuntenToe(10) }, // CORRECT (10 pt)
                             { text: 'Een flexibele planning. De mensen op de bouw helpen met uitladen wanneer het transport aankomt.', next: 'video5', action: () => voegPuntenToe(0) }
                         ]
                     },
@@ -199,23 +199,15 @@
                         ]
                     },
                     'vraag5b': {
-                        type: 'vraag', text: 'Kijk naar het elektrische schema\n\nWerkt de installatie zo goed, zo niet. Wat is er mis?',
-                        mediaType: 'image', media: '#img-vraag5', // Pas dit aan naar een nieuw ID als je een andere foto wilt gebruiken
+                        type: 'vraag', text: 'Bij de installatie van een pomp wordt opgemerkt dat deze niet goed werkt.\n\nBij de onderstaande metingen wordt 100 Ohm gemeten, wat betekent dat?',
+                        mediaType: 'image', media: '#img-vraag5b-elektro',
                         choices: [
-                            { text: 'Fout antwoord A', next: 'vraag5c', action: () => voegPuntenToe(0) },
-                            { text: 'Correct antwoord B', next: 'vraag5c', action: () => voegPuntenToe(10) }, // CORRECT (10 pt)
-                            { text: 'Fout antwoord C', next: 'vraag5c', action: () => voegPuntenToe(0) }
+                            { text: 'Te weinig stroom', next: 'vraag5c', action: () => voegPuntenToe(0) },
+                            { text: 'Kortsluiting tussen de fases', next: 'vraag5c', action: () => voegPuntenToe(10) }, // CORRECT (10 pt)
+                            { text: 'Kortsluiting tussen de behuizing en de fase', next: 'vraag5c', action: () => voegPuntenToe(0) }
                         ]
                     },
-                    'vraag5c': {
-                        type: 'vraag', text: '[EXTRA VRAAG 2 DEEL 5]\n\nTyp hier je tweede nieuwe vraag in.',
-                        mediaType: 'image', media: '#img-vraag5', // Pas dit aan naar een nieuw ID als je een andere foto wilt gebruiken
-                        choices: [
-                            { text: 'Fout antwoord X', next: 'einde', action: () => voegPuntenToe(0) },
-                            { text: 'Correct antwoord Y', next: 'einde', action: () => voegPuntenToe(10) }, // CORRECT (10 pt)
-                            { text: 'Fout antwoord Z', next: 'einde', action: () => voegPuntenToe(0) }
-                        ]
-                    },
+                    
 
                     // --- EINDE (Scorescherm) ---
                     'einde': {
@@ -228,9 +220,9 @@
                             if (score >= 155) beoordeling = 'Uitmuntend! Je hebt een perfect inzicht in onze processen.';
                             else if (score >= 115) beoordeling = 'Goed gedaan! Je hebt de belangrijkste zaken goed op orde.';
                             else if (score >= 75) beoordeling = 'Matig. Je hebt de basis door, maar er is ruimte voor verbetering.';
-                            else beoordeling = 'Onvoldoende. Let in de toekomst beter op de veiligheid en samenwerking.';
+                            else beoordeling = 'Onvoldoende. Let in de toekomst op de veiligheid en samenwerking.';
                             
-                            return `Einde van de experience!\n\nJouw score: ${score} van de ${this.gameState.maxScore} punten.\n\n${beoordeling}`;
+                            return `Einde van de experience!\n\nJouw score: ${score} / ${this.gameState.maxScore} punten\n\n${beoordeling}`;
                         },
                         mediaType: 'image', media: '#intro-bg',
                         choices: [
@@ -346,7 +338,7 @@
                             let nh = imgEl.naturalHeight || 600; 
                             let aspect = nw / nh;
                             
-                            let maxHeight = 2.5;
+                            let maxHeight = 2.2; // Foto iets kleiner gehouden voor meer ademruimte bij 4 knoppen
                             let maxWidth = 6.0;
                             
                             let calcHeight = maxHeight;
@@ -392,11 +384,11 @@
                         
                         // Layout voor start/eind knoppen vs 3-keuze vragen
                         if (this.gameState.currentScene === 'scene0') {
-                            y = -0.5 - (index * 0.9); // Knop 1 en 2 onder elkaar
+                            y = -0.9 - (index * 0.9); // Knop 1 en 2 onder elkaar
                             width = 3.5; height = 0.7;
                             wrapCount = 30;
                         } else if (this.gameState.currentScene === 'einde') {
-                            y = -1.0; width = 2.4; height = 0.8;
+                            y = -1.0; width = 3.5; height = 0.7; // Gelijkgetrokken met de beginpagina voor betere uitlijning
                             wrapCount = 30;
                         } else if (isQuestionScene) {
                             width = 5.5; 
@@ -406,13 +398,13 @@
                                 // Layout voor 4 antwoorden
                                 height = 0.35;
                                 const rowSpacing = 0.42;
-                                const startY = -0.8;
+                                const startY = -0.75;
                                 y = startY - (index * rowSpacing);
                             } else { 
                                 // Layout voor 2 of 3 antwoorden
                                 height = 0.45;
                                 const rowSpacing = 0.55;
-                                const startY = -0.9;
+                                const startY = -0.85;
                                 y = startY - (index * rowSpacing);
                             }
                         }
@@ -484,6 +476,7 @@
             <img id="img-vraag4-heftruck" src="heftruck.png" crossorigin="anonymous">
             <img id="img-vraag4b-vrachtwagen" src="vrachtwagen.png" crossorigin="anonymous">
             <img id="img-vraag5" src="klaar.png" crossorigin="anonymous">
+            <img id="img-vraag5b-elektro" src="elektro.png" crossorigin="anonymous">
 
             <video id="actie-video" src="intro.mp4" playsinline webkit-playsinline crossorigin="anonymous"></video>
             <video id="tweede-video" src="tweede.mp4" playsinline webkit-playsinline crossorigin="anonymous"></video>
@@ -499,16 +492,16 @@
         <a-entity laser-controls="hand: right" raycaster="objects: .clickable"></a-entity>
 
         <a-entity id="ui-container" position="0 1.5 -4.5">
-            <a-plane position="0 0.5 -0.05" width="7" height="4.5" color="#000" opacity="0.6" material="shader: flat; transparent: true"></a-plane>
+            <a-plane position="0 0.3 -0.05" width="7" height="5.2" color="#000" opacity="0.6" material="shader: flat; transparent: true"></a-plane>
             
             <a-text id="question-text" value="Laden..." align="center"
-                    position="0 2.2 0" width="6" wrap-count="55"
+                    position="0 2.4 0" width="6" wrap-count="55"
                     color="#f5f7fa" line-height="60"></a-text>
 
-            <a-image id="image-display" position="0 0.4 0" visible="false"></a-image>
+            <a-image id="image-display" position="0 0.6 0" visible="false"></a-image>
 
             <!-- Aangepast naar 16:9 ratio (5 / 2.81) -->
-            <a-video id="video-display" position="0 0.4 0" width="5" height="2.81" visible="false"></a-video>
+            <a-video id="video-display" position="0 0.6 0" width="5" height="2.81" visible="false"></a-video>
 
             <a-entity id="choices-container" position="0 0 0">
                 
