@@ -98,7 +98,7 @@
                         mediaType: 'video', media: '#actie-video', choices: [], onVideoEnd: 'vraag1'
                     },
                     'vraag1': {
-                        type: 'vraag', text: 'We hebben een nieuwe projectaanvraag voor een kas in Kazachstan.\n\nWaar moet je als constructie-engineer vooral op letten?',
+                        type: 'vraag', text: 'We hebben een nieuwe projectaanvraag voor een kas in Kazachstan.\n\nWaar moet je als constructie-engineer goed op letten?',
                         mediaType: 'image', media: '#img-vraag1',
                         choices: [
                             { text: 'Klimaatomstandigheden (wind-, sneeuw en temperatuurbelasting)', next: 'video1b', action: () => voegPuntenToe(0) },
@@ -108,7 +108,7 @@
                         ]
                     },
                     'video1b': {
-                        type: 'video', text: 'Meer informatie over kasklimaat en fossielvrije teelt.',
+                        type: 'video', text: 'Complexe klimaatinstallaties worden zeer nauwkeurig doorberekend.',
                         mediaType: 'video', media: '#klimaat-video', choices: [], onVideoEnd: 'vraag1b'
                     },
                     'vraag1b': {
@@ -116,7 +116,7 @@
                         mediaType: 'image', media: '#img-vraag1b',
                         choices: [
                             { text: 'Aquathermie en industriele warmtepompen', next: 'video2', action: () => voegPuntenToe(0) },
-                            { text: 'Zonne-energie en E-boilers met actieve luchtbehandeling (ontvochtiging)', next: 'video2', action: () => voegPuntenToe(0) },
+                            { text: 'E-boilers i.c.m. zonne-energie met actieve luchtbehandeling (ontvochtiging)', next: 'video2', action: () => voegPuntenToe(0) },
                             { text: 'Diepe ondergrondse warmte/koude seizoensopslag', next: 'video2', action: () => voegPuntenToe(0) },
                             { text: 'Een doordachte combinatie van de hierboven benoemde systemen', next: 'video2', action: () => voegPuntenToe(15) } // Pas hier eventueel de te behalen punten aan
                         ]
@@ -137,6 +137,7 @@
                             
                         ]
                     },
+
 
                     // --- DEEL 3 ---
                     'video3': {
@@ -203,7 +204,7 @@
                         ]
                     },
                     'video5b': {
-                        type: 'video', text: 'Een blik op de installatie door Cogas.',
+                        type: 'video', text: 'Cogas geeft de finishing touch.',
                         mediaType: 'video', media: '#cogas-video', choices: [], onVideoEnd: 'vraag5b'
                     },
                     'vraag5b': {
