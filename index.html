@@ -74,7 +74,7 @@
                 this.gameState = {
                     currentScene: 'scene0',
                     score: 0,
-                    maxScore: 155 // Totaal inclusief de twee nieuwe vragen in deel 5 (2x 10 pt)
+                    maxScore: 150 // Vraag 5C is verwijderd (-10 pt)
                 };
                 this.isTransitioning = false; // Voorkomt dubbele kliks
 
@@ -112,7 +112,7 @@
                         mediaType: 'image', media: '#img-vraag1b',
                         choices: [
                             { text: 'Aquathermie en industriele warmtepompen', next: 'video2', action: () => voegPuntenToe(0) },
-                            { text: 'E-boilers met actieve luchtbehandeling (ontvochtiging)', next: 'video2', action: () => voegPuntenToe(0) },
+                            { text: 'Zonne-energie en E-boilers met actieve luchtbehandeling (ontvochtiging)', next: 'video2', action: () => voegPuntenToe(0) },
                             { text: 'Diepe ondergrondse warmte/koude seizoensopslag', next: 'video2', action: () => voegPuntenToe(0) },
                             { text: 'Een doordachte combinatie van de hierboven benoemde systemen', next: 'video2', action: () => voegPuntenToe(15) } // Pas hier eventueel de te behalen punten aan
                         ]
@@ -160,8 +160,8 @@
                         choices: [
                             { text: 'Beton, staal, glas en plastic', next: 'vraag4b', action: () => voegPuntenToe(0) },
                             { text: 'Steen, aluminium, staal en glas', next: 'vraag4b', action: () => voegPuntenToe(0) },
-                            { text: 'Beton, staal, aluminium en glas', next: 'vraag4b', action: () => voegPuntenToe(0) },
-                            { text: 'Beton, staal, glas en aluminium', next: 'vraag4b', action: () => voegPuntenToe(15) } // CORRECT (15 pt)
+                            { text: 'Beton, staal, aluminium en glas', next: 'vraag4b', action: () => voegPuntenToe(20) },
+                            { text: 'Beton, staal, glas en aluminium', next: 'vraag4b', action: () => voegPuntenToe(0) } 
                         ]
                     },
                     'vraag4b': {
@@ -171,7 +171,7 @@
                             { text: 'Tussen de 25 en 75', next: 'vraag4c', action: () => voegPuntenToe(0) },
                             { text: 'Tussen de 75 en 150', next: 'vraag4c', action: () => voegPuntenToe(0) },
                              { text: 'Tussen de 150 en 225', next: 'vraag4c', action: () => voegPuntenToe(0) },
-                            { text: 'Meer dan 225', next: 'vraag4c', action: () => voegPuntenToe(20) }
+                            { text: 'Meer dan 225', next: 'vraag4c', action: () => voegPuntenToe(15) }
                         ]
                     },
                     'vraag4c': {
@@ -179,7 +179,7 @@
                         mediaType: 'image', media: '#img-vraag4b-vrachtwagen',
                         choices: [
                             { text: 'Al het materiaal zo snel mogelijk naar de bouwplaats sturen, zodat het altijd direct beschikbaar is.', next: 'video5', action: () => voegPuntenToe(0) },
-                            { text: 'Een strakke planning en communicatie. Materiaal wordt just-in-time verstuurd voor een efficiente bouwplaats.', next: 'video5', action: () => voegPuntenToe(10) }, // CORRECT (10 pt)
+                            { text: 'Een strakke planning en communicatie. Materiaal wordt strak op tijd verstuurd voor een efficiente inrichting van de bouwplaats.', next: 'video5', action: () => voegPuntenToe(15) }, // CORRECT (10 pt)
                             { text: 'Een flexibele planning. De mensen op de bouw helpen met uitladen wanneer het transport aankomt.', next: 'video5', action: () => voegPuntenToe(0) }
                         ]
                     },
@@ -190,30 +190,21 @@
                         mediaType: 'video', media: '#vijfde-video', choices: [], onVideoEnd: 'vraag5'
                     },
                     'vraag5': {
-                        type: 'vraag', text: 'Alle installaties, motoren en pompen worden bekabeld, daarbij gebruiken we voedingskabels, stuurkabels, datakabels en glasvezelverbindingen.\nWat is nog erg belangrijk om als projectleider in de gaten te houden?',
+                        type: 'vraag', text: 'Alle installaties, motoren,computers en pompen worden bekabeld, daarbij gebruiken we voedingskabels, stuurkabels, datakabels en glasvezelverbindingen.\n\nWat is nog erg belangrijk om als projectleider in de gaten te houden?',
                         mediaType: 'image', media: '#img-vraag5',
                         choices: [
                             { text: 'Dat er snel gewerkt wordt en alles goed wordt aangesloten', next: 'vraag5b', action: () => voegPuntenToe(0) },
-                            { text: 'Dat de kabels in de kabelgoot goed gescheiden worden, als een voedingskabel naast een stuurkabel ligt kun je storingen krijgen', next: 'vraag5b', action: () => voegPuntenToe(25) }, // CORRECT (25 pt)
+                            { text: 'Dat de kabels in de kabelgoot goed gescheiden worden, als een voedingskabel naast een stuurkabel ligt kun je storingen krijgen', next: 'vraag5b', action: () => voegPuntenToe(20) }, // CORRECT (25 pt)
                             { text: 'De gekozen kabels moeten gecontroleerd worden of ze geschikt zijn voor de installatie, engineers maken hier snel fouten mee', next: 'vraag5b', action: () => voegPuntenToe(0) }
                         ]
                     },
                     'vraag5b': {
-                        type: 'vraag', text: 'Een geïnstalleerde pomp werkt niet. Een meting geeft 100 Ohm aan.\n\nWat is de oorzaak?',
+                        type: 'vraag', text: 'Een geinstalleerde pomp werkt niet. De onderstaanding meting geeft 100 Ohm aan.\n\nWat is de oorzaak?',
                         mediaType: 'image', media: '#img-vraag5b-elektro',
                         choices: [
-                            { text: 'Te weinig stroom', next: 'vraag5c', action: () => voegPuntenToe(0) },
-                            { text: 'Kortsluiting tussen de fases', next: 'vraag5c', action: () => voegPuntenToe(10) }, // CORRECT (10 pt)
-                            { text: 'Kortsluiting tussen de behuizing en de fase', next: 'vraag5c', action: () => voegPuntenToe(0) }
-                        ]
-                    },
-                    'vraag5c': {
-                        type: 'vraag', text: 'De kas is klaar voor gebruik!\n\nWat is een belangrijke laatste stap voor de oplevering aan de klant?',
-                        mediaType: 'image', media: '#img-vraag5', // Gebruikt 'klaar.png'
-                        choices: [
-                            { text: 'Een uitgebreide rondleiding geven', next: 'einde', action: () => voegPuntenToe(0) },
-                            { text: 'De sleutels overhandigen en vertrekken', next: 'einde', action: () => voegPuntenToe(0) },
-                            { text: 'Alle systemen testen en de klant instructies geven', next: 'einde', action: () => voegPuntenToe(10) } // CORRECT (10 pt)
+                            { text: 'Te weinig stroom', next: 'einde', action: () => voegPuntenToe(0) },
+                            { text: 'Kortsluiting tussen de fases', next: 'einde', action: () => voegPuntenToe(15) }, 
+                            { text: 'Kortsluiting tussen de behuizing en de fase', next: 'einde', action: () => voegPuntenToe(0) }
                         ]
                     },
 
@@ -224,11 +215,11 @@
                             const score = this.gameState.score;
                             let beoordeling = '';
                             
-                            // Logica voor de beoordelingstekst (max score is 155)
-                            if (score >= 155) beoordeling = 'Uitmuntend! Je hebt een perfect inzicht in onze processen.';
-                            else if (score >= 115) beoordeling = 'Goed gedaan! Je hebt de belangrijkste zaken goed op orde.';
-                            else if (score >= 75) beoordeling = 'Matig. Je hebt de basis door, maar er is ruimte voor verbetering.';
-                            else beoordeling = 'Onvoldoende. Let in de toekomst op de veiligheid en samenwerking.';
+                            // Logica voor de beoordelingstekst (max score is 145)
+                            if (score >= 130) beoordeling = 'Uitstekend, jij hebt een goed begrip van de techniek en processen!';
+                            else if (score >= 95) beoordeling = 'Goed gedaan! Je begrijpt de basisprincipes van onze activiteiten .';
+                            else if (score >= 50) beoordeling = 'Goed je best gedaan. Je hebt de basis door, maar er is altijd ruimte voor verbetering.';
+                            else beoordeling = 'Goed geprobeerd, je begint het door te krijgen.';
                             
                             return `Einde van de experience!\n\nJouw score: ${score} / ${this.gameState.maxScore} punten\n\n${beoordeling}`;
                         },
@@ -346,7 +337,7 @@
                             let nh = imgEl.naturalHeight || 600; 
                             let aspect = nw / nh;
                             
-                            let maxHeight = 2.2; // Foto iets kleiner gehouden voor meer ademruimte bij 4 knoppen
+                            let maxHeight = 2.0; // Foto iets kleiner gehouden voor meer ademruimte bij 4 knoppen
                             let maxWidth = 6.0;
                             
                             let calcHeight = maxHeight;
@@ -406,13 +397,13 @@
                                 // Layout voor 4 antwoorden
                                 height = 0.33;
                                 const rowSpacing = 0.40;
-                                const startY = -0.85;
+                                const startY = -0.9;
                                 y = startY - (index * rowSpacing);
                             } else { 
                                 // Layout voor 2 of 3 antwoorden
                                 height = 0.45;
                                 const rowSpacing = 0.55;
-                                const startY = -0.85;
+                                const startY = -0.9;
                                 y = startY - (index * rowSpacing);
                             }
                         }
@@ -500,16 +491,16 @@
         <a-entity laser-controls="hand: right" raycaster="objects: .clickable"></a-entity>
 
         <a-entity id="ui-container" position="0 1.5 -4.5">
-            <a-plane position="0 0.3 -0.05" width="7" height="5.2" color="#000" opacity="0.6" material="shader: flat; transparent: true"></a-plane>
+            <a-plane position="0 0.4 -0.05" width="7" height="5.6" color="#000" opacity="0.6" material="shader: flat; transparent: true"></a-plane>
             
             <a-text id="question-text" value="Laden..." align="center"
-                    position="0 2.4 0" width="6" wrap-count="55"
+                    position="0 2.3 0" width="6" wrap-count="55"
                     color="#f5f7fa" line-height="60"></a-text>
 
-            <a-image id="image-display" position="0 0.6 0" visible="false"></a-image>
+            <a-image id="image-display" position="0 0.5 0" visible="false"></a-image>
 
             <!-- Aangepast naar 16:9 ratio (5 / 2.81) -->
-            <a-video id="video-display" position="0 0.6 0" width="5" height="2.81" visible="false"></a-video>
+            <a-video id="video-display" position="0 0.5 0" width="5" height="2.81" visible="false"></a-video>
 
             <a-entity id="choices-container" position="0 0 0">
                 
